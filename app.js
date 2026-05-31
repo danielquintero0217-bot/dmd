@@ -11,7 +11,7 @@ const translations = {
 
     hero_tag: 'Audiovisual Production · Cali, Colombia',
     hero_founders: 'Diego Zapata — Mateo Barreto — Daniel Quintero',
-    hero_tagline: 'High-end motion for fashion & sports — from Cali to the world.',
+    hero_tagline: 'High-end motion for fashion — from Cali to the world.',
     hero_cta: 'View Work',
     hero_cta2: 'Start a Project',
 
@@ -90,7 +90,7 @@ const translations = {
 
     hero_tag: 'Producción Audiovisual · Cali, Colombia',
     hero_founders: 'Diego Zapata — Mateo Barreto — Daniel Quintero',
-    hero_tagline: 'Motion de alto nivel para moda y deporte — desde Cali para el mundo.',
+    hero_tagline: 'Motion de alto nivel para moda — desde Cali para el mundo.',
     hero_cta: 'Ver Trabajo',
     hero_cta2: 'Iniciar Proyecto',
 
