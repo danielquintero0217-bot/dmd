@@ -1,108 +1,167 @@
 /* ═══════════════════════════════════════════════════
-   DMD — app.js
-   i18n · cursor · nav · reveals · portfolio · modal · faq · gsap
+   DMD — app.js  (v2)
+   i18n · cursor · nav · reveals · hero · portfolio+filter ·
+   modal · sheets (calendly/proposal) · faq · gsap
    ═══════════════════════════════════════════════════ */
 
 /* ── TRANSLATIONS ── */
 const translations = {
   en: {
-    nav_work:       'Work',
-    nav_about:      'About',
-    nav_contact:    'Contact',
+    nav_work: 'Work', nav_about: 'About', nav_contact: 'Contact',
 
-    hero_tag:       'Audiovisual Production · Colombia',
-    hero_line1:     'Crafting High-End',
-    hero_line2:     'Motion for Fashion.',
-    hero_line3:     'Exporting top-tier production',
-    hero_line4:     'from Colombia to the world.',
-    hero_cta:       'View Work',
+    hero_tag: 'Audiovisual Production · Cali, Colombia',
+    hero_founders: 'Diego Zapata — Mateo Barreto — Daniel Quintero',
+    hero_tagline: 'High-end motion for fashion & sports — from Cali to the world.',
+    hero_cta: 'View Work',
+    hero_cta2: 'Start a Project',
 
-    brands_label:   'Trusted By',
+    brands_label: 'Trusted By',
 
-    portfolio_tag:  'Selected Work',
-    portfolio_title:'Our Projects',
+    portfolio_tag: 'Selected Work',
+    portfolio_title: 'Our Projects',
+    filter_all: 'All',
+    filter_brand: 'Brand Films',
+    filter_fashion: 'Fashion',
+    filter_streaming: 'Streaming',
+    filter_campaign: 'Campaigns',
 
-    modal_cta:      'I want to know more →',
+    modal_role: 'Role', modal_year: 'Year',
+    modal_cta: 'Start a project like this →',
 
-    about_tag:      'About DMD',
-    about_title:    'We make brands move.',
-    about_desc:     'DMD is a high-end audiovisual production company based in Medellín, Colombia. We create brand films, campaigns, and editorial content for fashion and luxury brands worldwide. Our work bridges the creative energy of Latin America with the visual standards of global markets.',
-    stat_years:     'Years of Experience',
-    stat_brands:    'Global Brands',
-    stat_awards:    'Industry Awards',
+    about_tag: 'About DMD',
+    about_title: 'We make brands move.',
+    about_desc: 'DMD is a high-end audiovisual production studio based in Cali, Colombia. We create brand films, fashion editorials and campaigns for brands worldwide. Producing from Colombia lets us deliver world-class craft at a fraction of US and European rates — top-tier quality, accessible pricing.',
+    about_desc2: 'With diverse in-house gear and eight years of experience, we handle each project end to end — from concept to final color.',
+    stat_years: 'Years of Experience',
+    stat_brands: 'Brands Worldwide',
+    stat_inhouse: 'In-House Production',
+    team_tag: 'The Studio',
+    role_diego: 'Director & Cinematographer',
+    role_mateo: 'Producer & Editor',
+    role_daniel: 'Creative Director & Post',
 
-    cta_tag:        "Let's Work Together",
-    cta_title_line1:'Let\'s create',
-    cta_title_line2:'together.',
-    cta_sub:        'High-end production. Fast turnaround. World-class results.',
-    cta_book:       'Schedule a Call',
-    cta_quote:      'Request a Quote',
+    cta_tag: "Let's Work Together",
+    cta_title_line1: "Let's create",
+    cta_title_line2: 'together.',
+    cta_sub: 'High-end production. Fast turnaround. World-class results — at Colombian rates.',
+    cta_book: 'Schedule a Call',
+    cta_quote: 'Request a Proposal',
+    cta_note: 'Prefer email? <a href="mailto:danielquintero0217@gmail.com">danielquintero0217@gmail.com</a>',
+    cta_media_label: 'Showreel',
+    cta_media_sub: '2026',
 
-    faq_tag:        'FAQ',
-    faq_title:      'Common Questions',
-    faq_q1:         'Where are you based?',
-    faq_a1:         'We are based in Medellín, Colombia, with a production team that travels globally. We specialize in the US and European markets.',
-    faq_q2:         'Do you work with international clients?',
-    faq_a2:         'Yes. We specialize in remote collaboration and have extensive experience with brands across North America, Europe, and Latin America.',
-    faq_q3:         'What types of productions do you specialize in?',
-    faq_a3:         'Brand films, fashion editorials, commercial campaigns, music videos, and high-end promotional content for luxury and lifestyle brands.',
-    faq_q4:         'How do we start a project?',
-    faq_a4:         'Schedule a discovery call or send us your brief. We\'ll review it and come back with a tailored production proposal within 48 hours.',
-    faq_q5:         'What are your rates?',
-    faq_a5:         'Every project is unique. Contact us for a personalized quote — we offer competitive pricing without compromising on quality.',
+    sched_tag: 'Book a Discovery Call',
+    sched_title: "Let's talk about your project.",
+    sched_fallback: 'Calendar not loading? Email us at <a href="mailto:danielquintero0217@gmail.com">danielquintero0217@gmail.com</a>',
+
+    prop_tag: 'Request an Artistic Proposal',
+    prop_title: 'Tell us what you have in mind.',
+    prop_sub: "No call needed. Send us a brief and we'll come back with a tailored creative proposal.",
+    form_name: 'Name', form_email: 'Email', form_brand: 'Brand / Company',
+    form_type: 'Project type', form_budget: 'Estimated budget (USD)',
+    form_message: 'What do you have in mind?', form_send: 'Send Brief',
+    opt_brand: 'Brand Film', opt_fashion: 'Fashion / Editorial',
+    opt_streaming: 'Streaming', opt_campaign: 'Campaign', opt_other: 'Other',
+    opt_unsure: 'Not sure yet',
+    form_sending: 'Sending…',
+    form_ok: 'Thank you — your brief is on its way. We\'ll be in touch shortly.',
+    form_err: 'Something went wrong. Please email us at danielquintero0217@gmail.com',
+
+    faq_tag: 'FAQ',
+    faq_title: 'Common Questions',
+    faq_nudge: 'Still unsure? <a href="mailto:danielquintero0217@gmail.com">Write to us.</a>',
+    faq_q1: 'Where are you based?',
+    faq_a1: 'We are based in Cali, Colombia, and work with clients across the US, Europe and Latin America. Our team travels for production when a project calls for it.',
+    faq_q2: 'Do you work with international clients?',
+    faq_a2: "Yes — that's our focus. We're set up for remote collaboration and have extensive experience with brands in North America, Europe and Latin America.",
+    faq_q3: 'How do payments work?',
+    faq_a3: 'We invoice in USD or EUR. We ask for 50% upfront to lock the project in, and the remaining 50% on delivery of the final work.',
+    faq_q4: 'What are your rates?',
+    faq_a4: "Every project is unique. Because we produce from Colombia, we deliver top-tier quality at noticeably better rates than US or European studios. Tell us your brief and we'll quote it.",
+    faq_q5: 'How do we start a project?',
+    faq_a5: 'Book a discovery call or send us a brief through "Request a Proposal". We\'ll review it and come back with a tailored creative proposal.',
 
     footer_tagline: 'High-End Audiovisual Production',
-    footer_legal:   '© 2026 DMD. All rights reserved.',
+    footer_legal: '© 2026 DMD. All rights reserved.',
   },
 
   es: {
-    nav_work:       'Trabajo',
-    nav_about:      'Nosotros',
-    nav_contact:    'Contacto',
+    nav_work: 'Trabajo', nav_about: 'Nosotros', nav_contact: 'Contacto',
 
-    hero_tag:       'Producción Audiovisual · Colombia',
-    hero_line1:     'Producción Audiovisual',
-    hero_line2:     'de Alto Nivel.',
-    hero_line3:     'Desde Colombia para las',
-    hero_line4:     'mejores marcas del mundo.',
-    hero_cta:       'Ver Trabajo',
+    hero_tag: 'Producción Audiovisual · Cali, Colombia',
+    hero_founders: 'Diego Zapata — Mateo Barreto — Daniel Quintero',
+    hero_tagline: 'Motion de alto nivel para moda y deporte — desde Cali para el mundo.',
+    hero_cta: 'Ver Trabajo',
+    hero_cta2: 'Iniciar Proyecto',
 
-    brands_label:   'Confían en Nosotros',
+    brands_label: 'Confían en Nosotros',
 
-    portfolio_tag:  'Trabajo Selecto',
-    portfolio_title:'Nuestros Proyectos',
+    portfolio_tag: 'Trabajo Selecto',
+    portfolio_title: 'Nuestros Proyectos',
+    filter_all: 'Todos',
+    filter_brand: 'Films de Marca',
+    filter_fashion: 'Moda',
+    filter_streaming: 'Streaming',
+    filter_campaign: 'Campañas',
 
-    modal_cta:      'Quiero saber más →',
+    modal_role: 'Rol', modal_year: 'Año',
+    modal_cta: 'Quiero un proyecto así →',
 
-    about_tag:      'Sobre DMD',
-    about_title:    'Hacemos que las marcas se muevan.',
-    about_desc:     'DMD es una productora audiovisual de alto nivel con sede en Medellín, Colombia. Creamos películas de marca, campañas y contenido editorial para marcas de moda y lujo en todo el mundo. Nuestro trabajo une la energía creativa de América Latina con los estándares visuales de los mercados globales.',
-    stat_years:     'Años de Experiencia',
-    stat_brands:    'Marcas Globales',
-    stat_awards:    'Premios de la Industria',
+    about_tag: 'Sobre DMD',
+    about_title: 'Hacemos que las marcas se muevan.',
+    about_desc: 'DMD es un estudio de producción audiovisual de alto nivel con sede en Cali, Colombia. Creamos films de marca, editoriales de moda y campañas para marcas de todo el mundo. Producir desde Colombia nos permite entregar calidad de clase mundial a una fracción de las tarifas de EE. UU. y Europa — máxima calidad, precio accesible.',
+    about_desc2: 'Con equipos propios diversos y ocho años de experiencia, manejamos cada proyecto de principio a fin — del concepto al color final.',
+    stat_years: 'Años de Experiencia',
+    stat_brands: 'Marcas en el Mundo',
+    stat_inhouse: 'Producción Propia',
+    team_tag: 'El Estudio',
+    role_diego: 'Director y Director de Foto',
+    role_mateo: 'Productor y Editor',
+    role_daniel: 'Director Creativo y Post',
 
-    cta_tag:        'Trabajemos Juntos',
-    cta_title_line1:'Creemos algo',
-    cta_title_line2:'juntos.',
-    cta_sub:        'Producción de alto nivel. Entregas rápidas. Resultados de clase mundial.',
-    cta_book:       'Agendar Llamada',
-    cta_quote:      'Solicitar Cotización',
+    cta_tag: 'Trabajemos Juntos',
+    cta_title_line1: 'Creemos algo',
+    cta_title_line2: 'juntos.',
+    cta_sub: 'Producción de alto nivel. Entregas rápidas. Resultados de clase mundial — a tarifas colombianas.',
+    cta_book: 'Agendar Llamada',
+    cta_quote: 'Pedir una Propuesta',
+    cta_note: '¿Prefieres correo? <a href="mailto:danielquintero0217@gmail.com">danielquintero0217@gmail.com</a>',
+    cta_media_label: 'Showreel',
+    cta_media_sub: '2026',
 
-    faq_tag:        'Preguntas',
-    faq_title:      'Preguntas Frecuentes',
-    faq_q1:         '¿Dónde están ubicados?',
-    faq_a1:         'Estamos en Medellín, Colombia, con un equipo de producción que viaja globalmente. Nos especializamos en el mercado estadounidense y europeo.',
-    faq_q2:         '¿Trabajan con clientes internacionales?',
-    faq_a2:         'Sí. Nos especializamos en colaboración remota y tenemos amplia experiencia con marcas de Norteamérica, Europa y Latinoamérica.',
-    faq_q3:         '¿En qué tipos de producción se especializan?',
-    faq_a3:         'Películas de marca, editoriales de moda, campañas comerciales, videos musicales y contenido promocional de alto nivel para marcas de lujo.',
-    faq_q4:         '¿Cómo iniciamos un proyecto?',
-    faq_a4:         'Agenda una llamada de descubrimiento o envíanos tu brief. Lo revisaremos y te enviaremos una propuesta personalizada en 48 horas.',
-    faq_q5:         '¿Cuáles son sus tarifas?',
-    faq_a5:         'Cada proyecto es único. Contáctanos para una cotización personalizada: ofrecemos precios competitivos sin comprometer la calidad.',
+    sched_tag: 'Agenda una Llamada',
+    sched_title: 'Hablemos de tu proyecto.',
+    sched_fallback: '¿No carga el calendario? Escríbenos a <a href="mailto:danielquintero0217@gmail.com">danielquintero0217@gmail.com</a>',
+
+    prop_tag: 'Pide una Propuesta Artística',
+    prop_title: 'Cuéntanos qué tienes en mente.',
+    prop_sub: 'Sin llamada. Envíanos un brief y te devolvemos una propuesta creativa a tu medida.',
+    form_name: 'Nombre', form_email: 'Correo', form_brand: 'Marca / Empresa',
+    form_type: 'Tipo de proyecto', form_budget: 'Presupuesto estimado (USD)',
+    form_message: '¿Qué tienes en mente?', form_send: 'Enviar Brief',
+    opt_brand: 'Film de Marca', opt_fashion: 'Moda / Editorial',
+    opt_streaming: 'Streaming', opt_campaign: 'Campaña', opt_other: 'Otro',
+    opt_unsure: 'Aún no estoy seguro',
+    form_sending: 'Enviando…',
+    form_ok: 'Gracias — tu brief va en camino. Te contactamos muy pronto.',
+    form_err: 'Algo salió mal. Escríbenos a danielquintero0217@gmail.com',
+
+    faq_tag: 'Preguntas',
+    faq_title: 'Preguntas Frecuentes',
+    faq_nudge: '¿Aún con dudas? <a href="mailto:danielquintero0217@gmail.com">Escríbenos.</a>',
+    faq_q1: '¿Dónde están ubicados?',
+    faq_a1: 'Estamos en Cali, Colombia, y trabajamos con clientes de EE. UU., Europa y Latinoamérica. Nuestro equipo viaja para producir cuando el proyecto lo amerita.',
+    faq_q2: '¿Trabajan con clientes internacionales?',
+    faq_a2: 'Sí — es nuestro foco. Estamos listos para colaboración remota y tenemos amplia experiencia con marcas de Norteamérica, Europa y Latinoamérica.',
+    faq_q3: '¿Cómo funcionan los pagos?',
+    faq_a3: 'Facturamos en USD o EUR. Pedimos el 50% por adelantado para asegurar el proyecto, y el 50% restante a la entrega del trabajo final.',
+    faq_q4: '¿Cuáles son sus tarifas?',
+    faq_a4: 'Cada proyecto es único. Como producimos desde Colombia, entregamos máxima calidad a tarifas notablemente mejores que estudios de EE. UU. o Europa. Cuéntanos tu brief y lo cotizamos.',
+    faq_q5: '¿Cómo iniciamos un proyecto?',
+    faq_a5: 'Agenda una llamada o envíanos un brief en "Pedir una Propuesta". Lo revisamos y te devolvemos una propuesta creativa a tu medida.',
 
     footer_tagline: 'Producción Audiovisual de Alto Nivel',
-    footer_legal:   '© 2026 DMD. Todos los derechos reservados.',
+    footer_legal: '© 2026 DMD. Todos los derechos reservados.',
   }
 };
 
@@ -114,7 +173,7 @@ function $(sel, ctx = document) { return ctx.querySelector(sel); }
 function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 
 /* ══════════════════════════════════
-   i18n SYSTEM
+   i18n
 ══════════════════════════════════ */
 function applyTranslations(lang) {
   currentLang = lang;
@@ -124,29 +183,26 @@ function applyTranslations(lang) {
   $$('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     const val = translations[lang][key];
-    if (val !== undefined) el.textContent = val;
+    if (val === undefined) return;
+    /* strings with markup (links) → innerHTML, otherwise textContent */
+    if (val.indexOf('<') !== -1) el.innerHTML = val;
+    else el.textContent = val;
   });
 
-  /* Update lang toggle visual state */
   $$('.lang-opt').forEach(btn => btn.classList.remove('active'));
   $(`.lang-${lang}`)?.classList.add('active');
 
-  /* Update portfolio follower if hovering */
+  /* refresh portfolio follower if active */
   const follower = $('#portfolio-follower');
   if (follower && follower.classList.contains('active')) {
     const hovered = $('.portfolio-item:hover');
-    if (hovered) {
-      follower.textContent = hovered.getAttribute(`data-project-${lang}`) || hovered.getAttribute('data-project-en') || '';
-    }
+    if (hovered) follower.textContent = hovered.getAttribute(`data-project-${lang}`) || hovered.getAttribute('data-project-en') || '';
   }
 }
 
 function initI18n() {
-  /* Always default to EN for US market — only use saved preference */
   const saved = localStorage.getItem('dmd-lang');
-  const initLang = saved || 'en';
-
-  applyTranslations(initLang);
+  applyTranslations(saved || 'en');
 
   $('#lang-toggle')?.addEventListener('click', () => {
     const next = currentLang === 'en' ? 'es' : 'en';
@@ -156,28 +212,24 @@ function initI18n() {
 }
 
 /* ══════════════════════════════════
-   CUSTOM CURSOR (adapted from vault: cursor-personalizado.md)
-   Color adapted: gold → off-white for DMD
+   CUSTOM CURSOR
 ══════════════════════════════════ */
 function initCursor() {
-  if (window.matchMedia('(pointer: coarse)').matches) return; /* skip touch devices */
+  if (window.matchMedia('(pointer: coarse)').matches) return;
 
   const dot  = $('#cursor-dot');
   const ring = $('#cursor-ring');
   if (!dot || !ring) return;
 
-  let rx = 0, ry = 0;
-  let dotX = 0, dotY = 0;
+  let rx = 0, ry = 0, dotX = 0, dotY = 0;
 
   document.addEventListener('mousemove', (e) => {
-    dotX = e.clientX;
-    dotY = e.clientY;
+    dotX = e.clientX; dotY = e.clientY;
     dot.style.left = dotX + 'px';
     dot.style.top  = dotY + 'px';
     document.body.classList.add('cursor-ready');
   });
 
-  /* Ring follows with lerp */
   (function lerp() {
     rx += (dotX - rx) * 0.12;
     ry += (dotY - ry) * 0.12;
@@ -186,43 +238,29 @@ function initCursor() {
     requestAnimationFrame(lerp);
   })();
 
-  /* Magnetic expand on interactive elements */
-  const interactors = 'a, button, .portfolio-item, .faq-q, .btn-primary, .btn-secondary';
-  $$('body').forEach(() => {
-    document.addEventListener('mouseover', (e) => {
-      if (e.target.closest(interactors)) {
-        ring.style.width  = '46px';
-        ring.style.height = '46px';
-        ring.style.borderColor = 'rgba(234,234,234,0.55)';
-      }
-    });
-    document.addEventListener('mouseout', (e) => {
-      if (e.target.closest(interactors)) {
-        ring.style.width  = '32px';
-        ring.style.height = '32px';
-        ring.style.borderColor = 'rgba(234,234,234,0.35)';
-      }
-    });
+  const interactors = 'a, button, .portfolio-item, .faq-q, .filter-btn, input, select, textarea';
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest(interactors)) {
+      ring.style.width = '46px'; ring.style.height = '46px';
+      ring.style.borderColor = 'rgba(234,234,234,0.55)';
+    }
   });
-
-  /* Hide on scroll-over nav (looks cleaner) */
-  document.addEventListener('mouseleave', () => {
-    dot.style.opacity  = '0';
-    ring.style.opacity = '0';
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest(interactors)) {
+      ring.style.width = '32px'; ring.style.height = '32px';
+      ring.style.borderColor = 'rgba(234,234,234,0.35)';
+    }
   });
-  document.addEventListener('mouseenter', () => {
-    dot.style.opacity  = '1';
-    ring.style.opacity = '1';
-  });
+  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
 }
 
 /* ══════════════════════════════════
-   NAV — transparent → opaque on scroll
+   NAV
 ══════════════════════════════════ */
 function initNav() {
   const nav = $('#nav');
   if (!nav) return;
-
   const io = new IntersectionObserver(
     ([entry]) => nav.classList.toggle('scrolled', !entry.isIntersecting),
     { threshold: 0, rootMargin: '-80px 0px 0px 0px' }
@@ -234,85 +272,106 @@ function initNav() {
 }
 
 /* ══════════════════════════════════
-   REVEAL (from vault: reveal-scroll.md)
+   REVEAL
 ══════════════════════════════════ */
 function initReveals() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     $$('.reveal').forEach(el => el.classList.add('visible'));
     return;
   }
-
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
-      }
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
     });
   }, { threshold: 0.05 });
-
   $$('.reveal').forEach(el => io.observe(el));
 }
 
 /* ══════════════════════════════════
-   PORTFOLIO — hover video + cursor follower + modal trigger
+   HERO BACKGROUND VIDEO (optional drop-in)
+   Looks for assets/showreel.mp4 — if present, fades it in (fetch/Blob for seeking-safe).
+══════════════════════════════════ */
+function initShowreel(videoEl, src) {
+  if (!videoEl) return;
+  fetch(src, { method: 'HEAD' })
+    .then(r => {
+      if (!r.ok) return;
+      videoEl.src = src;
+      videoEl.play().catch(() => {});
+      videoEl.addEventListener('loadeddata', () => videoEl.classList.add('loaded'), { once: true });
+    })
+    .catch(() => { /* no showreel yet — animated placeholder stays */ });
+}
+
+/* ══════════════════════════════════
+   PORTFOLIO — filter + hover follower + modal
 ══════════════════════════════════ */
 function initPortfolio() {
+  const grid     = $('#portfolio-grid');
   const items    = $$('.portfolio-item');
   const follower = $('#portfolio-follower');
-  const modal    = $('#modal');
-
   if (!items.length) return;
 
+  /* Filters */
+  $$('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-filter');
+      $$('.filter-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected', 'true');
+
+      if (grid) grid.style.opacity = '0';
+      setTimeout(() => {
+        items.forEach(item => {
+          const match = cat === 'all' || item.getAttribute('data-cat') === cat;
+          item.classList.toggle('hide', !match);
+        });
+        if (grid) grid.style.opacity = '1';
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+      }, 220);
+    });
+  });
+  if (grid) grid.style.transition = 'opacity .22s ease';
+
+  /* Hover follower + modal */
   items.forEach(item => {
-    /* Cursor follower */
     item.addEventListener('mouseenter', () => {
       if (!follower) return;
-      const lang = currentLang;
-      follower.textContent = item.getAttribute(`data-project-${lang}`) || item.getAttribute('data-project-en') || '';
+      follower.textContent = item.getAttribute(`data-project-${currentLang}`) || item.getAttribute('data-project-en') || '';
       follower.classList.add('active');
     });
-
     item.addEventListener('mousemove', (e) => {
       if (!follower) return;
       follower.style.left = (e.clientX + 24) + 'px';
       follower.style.top  = e.clientY + 'px';
     });
+    item.addEventListener('mouseleave', () => { if (follower) follower.classList.remove('active'); });
 
-    item.addEventListener('mouseleave', () => {
-      if (!follower) return;
-      follower.classList.remove('active');
-    });
-
-    /* Click → open modal */
     item.addEventListener('click', () => openModal(item));
     item.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(item); }
     });
   });
 
-  /* Close modal */
   $('#modal-close')?.addEventListener('click', closeModal);
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
+  $('#modal')?.addEventListener('click', (e) => { if (e.target === $('#modal')) closeModal(); });
+  $('#modal-cta')?.addEventListener('click', () => {
+    closeModal();
+    setTimeout(() => $('#contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeSheets(); } });
 }
 
 function openModal(item) {
-  const modal     = $('#modal');
-  const titleEl   = $('#modal-title');
-  const tagEl     = $('#modal-tag');
+  const modal = $('#modal');
   if (!modal) return;
+  const lang = currentLang;
+  const g = (k) => item.getAttribute(`data-${k}-${lang}`) || item.getAttribute(`data-${k}-en`) || '';
 
-  const lang    = currentLang;
-  const name    = item.getAttribute(`data-project-${lang}`) || item.getAttribute('data-project-en') || '';
-  const cat     = item.getAttribute('data-category') || '';
-
-  if (titleEl) titleEl.textContent = name;
-  if (tagEl)   tagEl.textContent   = cat;
+  $('#modal-title').textContent = g('project');
+  $('#modal-tag').textContent   = item.getAttribute('data-category') || '';
+  $('#modal-desc').textContent  = g('desc');
+  $('#modal-role').textContent  = g('role');
+  $('#modal-year').textContent  = item.getAttribute('data-year') || '';
 
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
@@ -321,10 +380,69 @@ function openModal(item) {
 
 function closeModal() {
   const modal = $('#modal');
-  if (!modal) return;
+  if (!modal || !modal.classList.contains('open')) return;
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+}
+
+/* ══════════════════════════════════
+   SHEETS — schedule (Calendly) + proposal (Web3Forms)
+══════════════════════════════════ */
+let calendlyLoaded = false;
+function loadCalendly() {
+  if (calendlyLoaded) return;
+  calendlyLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://assets.calendly.com/assets/external/widget.js';
+  s.async = true;
+  document.body.appendChild(s);
+}
+
+function openSheet(id) {
+  const sheet = document.getElementById(id);
+  if (!sheet) return;
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  if (id === 'schedule-modal') loadCalendly();
+}
+
+function closeSheets() {
+  $$('.sheet-overlay.open').forEach(s => {
+    s.classList.remove('open');
+    s.setAttribute('aria-hidden', 'true');
+  });
+  document.body.style.overflow = '';
+}
+
+function initSheets() {
+  $('#open-schedule')?.addEventListener('click', () => openSheet('schedule-modal'));
+  $('#open-proposal')?.addEventListener('click', () => openSheet('proposal-modal'));
+  $$('[data-close-sheet]').forEach(b => b.addEventListener('click', closeSheets));
+  $$('.sheet-overlay').forEach(s => s.addEventListener('click', (e) => { if (e.target === s) closeSheets(); }));
+
+  /* Proposal form → Web3Forms */
+  const form = $('#proposal-form');
+  const status = $('#form-status');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (status) { status.className = 'form-status'; status.textContent = translations[currentLang].form_sending; }
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        const json = await res.json();
+        if (json.success) {
+          if (status) { status.className = 'form-status ok'; status.textContent = translations[currentLang].form_ok; }
+          form.reset();
+        } else {
+          if (status) { status.className = 'form-status error'; status.textContent = translations[currentLang].form_err; }
+        }
+      } catch (err) {
+        if (status) { status.className = 'form-status error'; status.textContent = translations[currentLang].form_err; }
+      }
+    });
+  }
 }
 
 /* ══════════════════════════════════
@@ -335,19 +453,14 @@ function initFaq() {
     const btn = item.querySelector('.faq-q');
     const ans = item.querySelector('.faq-a');
     if (!btn || !ans) return;
-
     btn.addEventListener('click', () => {
       const isOpen = btn.getAttribute('aria-expanded') === 'true';
-
-      /* Close all others */
       $$('.faq-q[aria-expanded="true"]').forEach(openBtn => {
         if (openBtn !== btn) {
           openBtn.setAttribute('aria-expanded', 'false');
           openBtn.closest('.faq-item')?.querySelector('.faq-a')?.classList.remove('open');
         }
       });
-
-      /* Toggle current */
       btn.setAttribute('aria-expanded', String(!isOpen));
       ans.classList.toggle('open', !isOpen);
     });
@@ -355,40 +468,35 @@ function initFaq() {
 }
 
 /* ══════════════════════════════════
-   GSAP — hero reveal + scroll parallax
+   GSAP — hero wordmark reveal + parallax
 ══════════════════════════════════ */
 function initGsap() {
   if (typeof gsap === 'undefined') return;
   if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
-  /* Hero text stagger */
-  gsap.fromTo('.hero-tag',
-    { opacity: 0, y: 16 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 }
-  );
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    gsap.set('.hero-tag, .wm-letter, .hero-founders, .hero-tagline, .hero-actions', { opacity: 1, y: 0 });
+    return;
+  }
 
-  gsap.fromTo('.hero-line',
-    { opacity: 0, y: 44 },
-    { opacity: 1, y: 0, duration: 1.1, stagger: 0.13, ease: 'power3.out', delay: 0.45 }
-  );
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.fromTo('.hero-tag', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
+    .fromTo('.wm-letter', { opacity: 0, yPercent: 22 }, { opacity: 1, yPercent: 0, duration: 1.1, stagger: 0.12 }, '-=0.3')
+    .fromTo('.hero-founders', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.5')
+    .fromTo('.hero-tagline', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.6')
+    .fromTo('.hero-actions', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5');
 
-  gsap.fromTo('.hero-cta',
-    { opacity: 0 },
-    { opacity: 1, duration: 1.0, ease: 'power2.out', delay: 1.3 }
-  );
-
-  /* Scroll parallax on portfolio media — subtle scale + translateY */
+  /* Subtle wordmark drift on scroll */
   if (typeof ScrollTrigger !== 'undefined') {
+    gsap.to('.hero-wordmark', {
+      yPercent: 14, opacity: 0.5, ease: 'none',
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+    });
     $$('.media-still, .media-video').forEach(media => {
       gsap.to(media, {
-        yPercent: -8,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: media.closest('.portfolio-item'),
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.2,
-        }
+        yPercent: -6, ease: 'none',
+        scrollTrigger: { trigger: media.closest('.portfolio-item'), start: 'top bottom', end: 'bottom top', scrub: 1.2 }
       });
     });
   }
@@ -400,7 +508,9 @@ function initGsap() {
 function initSmoothScroll() {
   $$('a[href^="#"]').forEach(a => {
     a.addEventListener('click', (e) => {
-      const target = document.querySelector(a.getAttribute('href'));
+      const href = a.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
       if (!target) return;
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -417,11 +527,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initReveals();
   initPortfolio();
+  initSheets();
   initFaq();
   initSmoothScroll();
+  initShowreel($('#hero-video'), 'assets/showreel.mp4');
+  initShowreel($('#cta-video'), 'assets/showreel.mp4');
 });
 
-/* GSAP needs to run after all scripts loaded */
-window.addEventListener('load', () => {
-  initGsap();
-});
+window.addEventListener('load', () => { initGsap(); });
