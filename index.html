@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DMD — High-end audiovisual production for fashion brands. From Colombia to the world.">
+  <meta name="keywords" content="audiovisual production, brand film, fashion, Colombia, video production">
+  <meta property="og:title" content="DMD — High-End Audiovisual Production">
+  <meta property="og:description" content="Crafting high-end motion for fashion brands. Exporting top-tier production from Colombia to the world.">
+  <title>DMD — High-End Audiovisual Production</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor-dot" aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="#" class="nav-logo" aria-label="DMD Home">DMD</a>
+    <ul class="nav-links" role="list">
+      <li><a href="#portfolio" data-i18n="nav_work">Work</a></li>
+      <li><a href="#about" data-i18n="nav_about">About</a></li>
+      <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language EN/ES">
+      <span class="lang-opt lang-en">EN</span>
+      <span class="lang-sep">/</span>
+      <span class="lang-opt lang-es">ES</span>
+    </button>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section id="hero" aria-label="Hero">
+    <div class="hero-inner">
+      <span class="hero-tag" data-i18n="hero_tag">Audiovisual Production · Colombia</span>
+      <h1 class="hero-title" aria-label="DMD — High-End Motion for Fashion Brands">
+        <span class="hero-line" data-i18n="hero_line1">Crafting High-End</span>
+        <span class="hero-line hero-italic" data-i18n="hero_line2">Motion for Fashion.</span>
+        <span class="hero-line" data-i18n="hero_line3">Exporting top-tier production</span>
+        <span class="hero-line hero-muted" data-i18n="hero_line4">from Colombia to the world.</span>
+      </h1>
+      <a href="#portfolio" class="hero-cta" data-i18n="hero_cta">View Work</a>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="hero-scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- ═══ BRANDS MARQUEE ═══ -->
+  <section id="brands" aria-label="Clients and brands">
+    <div class="brands-label reveal">
+      <span data-i18n="brands_label">Trusted By</span>
+    </div>
+    <div class="marquee-wrapper" aria-hidden="true">
+      <div class="marquee-track">
+        <!-- First set -->
+        <a href="#" class="brand-item" target="_blank" rel="noopener">NIKE</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">DIOR</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">ADIDAS</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">NETFLIX</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">GUCCI</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">SAMSUNG</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">ZARA</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">CARTIER</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <!-- Duplicate for seamless loop -->
+        <a href="#" class="brand-item" target="_blank" rel="noopener">NIKE</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">DIOR</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">ADIDAS</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">NETFLIX</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">GUCCI</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">SAMSUNG</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">ZARA</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+        <a href="#" class="brand-item" target="_blank" rel="noopener">CARTIER</a>
+        <span class="brand-dot" aria-hidden="true">·</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PORTFOLIO ═══ -->
+  <section id="portfolio" aria-label="Portfolio">
+    <div class="section-header reveal">
+      <span class="section-tag" data-i18n="portfolio_tag">Selected Work</span>
+      <h2 data-i18n="portfolio_title">Our Projects</h2>
+    </div>
+
+    <div class="portfolio-grid" id="portfolio-grid">
+
+      <!-- Item 1 — Full width panoramic -->
+      <article class="portfolio-item item-wide"
+        data-project-en="Nike — Brand Film 2025"
+        data-project-es="Nike — Film de Marca 2025"
+        data-category="Brand Film"
+        role="button" tabindex="0" aria-label="Nike Brand Film project">
+        <div class="media-wrapper">
+          <div class="media-still p1">
+            <span class="media-num">01</span>
+            <span class="media-cat">Brand Film</span>
+          </div>
+          <div class="media-video v1">
+            <svg class="play-btn" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="23" fill="none" stroke="rgba(234,234,234,0.25)" stroke-width="1"/>
+              <polygon points="19,14 37,24 19,34" fill="rgba(234,234,234,0.35)"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 2 — Portrait left -->
+      <article class="portfolio-item item-portrait"
+        data-project-en="Dior — Editorial"
+        data-project-es="Dior — Editorial"
+        data-category="Editorial"
+        role="button" tabindex="0" aria-label="Dior Editorial project">
+        <div class="media-wrapper">
+          <div class="media-still p2">
+            <span class="media-num">02</span>
+            <span class="media-cat">Editorial</span>
+          </div>
+          <div class="media-video v2">
+            <svg class="play-btn" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="23" fill="none" stroke="rgba(234,234,234,0.25)" stroke-width="1"/>
+              <polygon points="19,14 37,24 19,34" fill="rgba(234,234,234,0.35)"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 3 — Landscape right -->
+      <article class="portfolio-item item-landscape"
+        data-project-en="Adidas — Global Campaign"
+        data-project-es="Adidas — Campaña Global"
+        data-category="Campaign"
+        role="button" tabindex="0" aria-label="Adidas Campaign project">
+        <div class="media-wrapper">
+          <div class="media-still p3">
+            <span class="media-num">03</span>
+            <span class="media-cat">Campaign</span>
+          </div>
+          <div class="media-video v3">
+            <svg class="play-btn" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="23" fill="none" stroke="rgba(234,234,234,0.25)" stroke-width="1"/>
+              <polygon points="19,14 37,24 19,34" fill="rgba(234,234,234,0.35)"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 4 — Landscape left -->
+      <article class="portfolio-item item-landscape"
+        data-project-en="Netflix — Show Promo"
+        data-project-es="Netflix — Promo de Serie"
+        data-category="Promo"
+        role="button" tabindex="0" aria-label="Netflix Promo project">
+        <div class="media-wrapper">
+          <div class="media-still p4">
+            <span class="media-num">04</span>
+            <span class="media-cat">Promo</span>
+          </div>
+          <div class="media-video v4">
+            <svg class="play-btn" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="23" fill="none" stroke="rgba(234,234,234,0.25)" stroke-width="1"/>
+              <polygon points="19,14 37,24 19,34" fill="rgba(234,234,234,0.35)"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 5 — Portrait right -->
+      <article class="portfolio-item item-portrait"
+        data-project-en="Gucci — Lookbook SS26"
+        data-project-es="Gucci — Lookbook PV26"
+        data-category="Lookbook"
+        role="button" tabindex="0" aria-label="Gucci Lookbook project">
+        <div class="media-wrapper">
+          <div class="media-still p5">
+            <span class="media-num">05</span>
+            <span class="media-cat">Lookbook</span>
+          </div>
+          <div class="media-video v5">
+            <svg class="play-btn" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="23" fill="none" stroke="rgba(234,234,234,0.25)" stroke-width="1"/>
+              <polygon points="19,14 37,24 19,34" fill="rgba(234,234,234,0.35)"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 6 — Full width panoramic -->
+      <article class="portfolio-item item-wide"
+        data-project-en="Samsung — Tech Film"
+        data-project-es="Samsung — Tech Film"
+        data-category="Tech Film"
+        role="button" tabindex="0" aria-label="Samsung Tech Film project">
+        <div class="media-wrapper">
+          <div class="media-still p6">
+            <span class="media-num">06</span>
+            <span class="media-cat">Tech Film</span>
+          </div>
+          <div class="media-video v6">
+            <svg class="play-btn" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="23" fill="none" stroke="rgba(234,234,234,0.25)" stroke-width="1"/>
+              <polygon points="19,14 37,24 19,34" fill="rgba(234,234,234,0.35)"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Project name follower -->
+    <div class="portfolio-follower" id="portfolio-follower" aria-hidden="true"></div>
+  </section>
+
+  <!-- ═══ VIDEO MODAL ═══ -->
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-label="Project video" aria-hidden="true">
+    <div class="modal-inner">
+      <button class="modal-close" id="modal-close" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+      <div class="modal-media">
+        <div class="modal-placeholder" id="modal-placeholder">
+          <svg class="modal-play-icon" viewBox="0 0 72 72" aria-hidden="true">
+            <circle cx="36" cy="36" r="35" fill="none" stroke="rgba(234,234,234,0.15)" stroke-width="1"/>
+            <polygon points="28,20 57,36 28,52" fill="rgba(234,234,234,0.2)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="modal-content">
+        <span class="modal-project-tag" id="modal-tag"></span>
+        <h3 class="modal-title" id="modal-title"></h3>
+        <a href="project.html" class="modal-cta" data-i18n="modal_cta">I want to know more →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ABOUT ═══ -->
+  <section id="about" aria-label="About DMD">
+    <div class="about-inner">
+      <div class="about-text reveal">
+        <span class="section-tag" data-i18n="about_tag">About DMD</span>
+        <h2 data-i18n="about_title">We make brands move.</h2>
+        <p data-i18n="about_desc">DMD is a high-end audiovisual production company based in Medellín, Colombia. We create brand films, campaigns, and editorial content for fashion and luxury brands worldwide. Our work bridges the creative energy of Latin America with the visual standards of global markets.</p>
+      </div>
+      <div class="about-stats reveal" style="transition-delay:120ms">
+        <div class="stat">
+          <span class="stat-num">8+</span>
+          <span class="stat-label" data-i18n="stat_years">Years of Experience</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">40+</span>
+          <span class="stat-label" data-i18n="stat_brands">Global Brands</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">3</span>
+          <span class="stat-label" data-i18n="stat_awards">Industry Awards</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section id="contact" aria-label="Contact">
+    <div class="cta-inner">
+      <div class="reveal">
+        <span class="section-tag" data-i18n="cta_tag">Let's Work Together</span>
+        <h2 class="cta-title">
+          <span data-i18n="cta_title_line1">Let's create</span><br>
+          <em data-i18n="cta_title_line2">together.</em>
+        </h2>
+        <p class="cta-sub" data-i18n="cta_sub">High-end production. Fast turnaround. World-class results.</p>
+        <div class="cta-buttons">
+          <a href="#" class="btn-primary" data-i18n="cta_book">Schedule a Call</a>
+          <a href="mailto:contact@dmd.co" class="btn-secondary" data-i18n="cta_quote">Request a Quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section id="faq" aria-label="Frequently asked questions">
+    <div class="section-header reveal">
+      <span class="section-tag" data-i18n="faq_tag">FAQ</span>
+      <h2 data-i18n="faq_title">Common Questions</h2>
+    </div>
+
+    <div class="faq-list" id="faq-list" role="list">
+
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span data-i18n="faq_q1">Where are you based?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" class="faq-h"/>
+          </svg>
+        </button>
+        <div class="faq-a" role="region">
+          <p data-i18n="faq_a1">We are based in Medellín, Colombia, with a production team that travels globally. We specialize in the US and European markets.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="transition-delay:60ms" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span data-i18n="faq_q2">Do you work with international clients?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" class="faq-h"/>
+          </svg>
+        </button>
+        <div class="faq-a" role="region">
+          <p data-i18n="faq_a2">Yes. We specialize in remote collaboration and have extensive experience with brands across North America, Europe, and Latin America.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="transition-delay:120ms" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span data-i18n="faq_q3">What types of productions do you specialize in?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" class="faq-h"/>
+          </svg>
+        </button>
+        <div class="faq-a" role="region">
+          <p data-i18n="faq_a3">Brand films, fashion editorials, commercial campaigns, music videos, and high-end promotional content for luxury and lifestyle brands.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="transition-delay:180ms" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span data-i18n="faq_q4">How do we start a project?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" class="faq-h"/>
+          </svg>
+        </button>
+        <div class="faq-a" role="region">
+          <p data-i18n="faq_a4">Schedule a discovery call or send us your brief. We'll review it and come back with a tailored production proposal within 48 hours.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="transition-delay:240ms" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span data-i18n="faq_q5">What are your rates?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" class="faq-h"/>
+          </svg>
+        </button>
+        <div class="faq-a" role="region">
+          <p data-i18n="faq_a5">Every project is unique. Contact us for a personalized quote — we offer competitive pricing without compromising on quality.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer id="footer" aria-label="Footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo">DMD</span>
+        <p class="footer-tagline" data-i18n="footer_tagline">High-End Audiovisual Production</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#portfolio" data-i18n="nav_work">Work</a>
+        <a href="#about" data-i18n="nav_about">About</a>
+        <a href="#contact" data-i18n="nav_contact">Contact</a>
+      </nav>
+      <div class="footer-social" aria-label="Social media">
+        <a href="#" aria-label="Instagram" class="social-link">IG</a>
+        <a href="#" aria-label="LinkedIn" class="social-link">LI</a>
+        <a href="#" aria-label="Vimeo" class="social-link">VM</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-legal" data-i18n="footer_legal">© 2026 DMD. All rights reserved.</p>
+      <p class="footer-location">Medellín, Colombia</p>
+    </div>
+  </footer>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
