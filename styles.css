@@ -72,6 +72,21 @@ svg { display: block; }
 body.cursor-ready #cursor-dot,
 body.cursor-ready #cursor-ring { opacity: 1; }
 
+/* ── FLOATING PARTICLES ── */
+#particles {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 1.2s ease;
+}
+#particles.ready { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { #particles { display: none; } }
+
 /* ── NAV ── */
 #nav {
   position: fixed;
@@ -223,6 +238,7 @@ body.cursor-ready #cursor-ring { opacity: 1; }
 .hero-tagline {
   margin-top: clamp(16px, 2vw, 22px);
   max-width: 640px;
+  min-height: 1.4em;
   font-family: var(--ff-display);
   font-style: italic;
   font-size: clamp(1.05rem, 2vw, 1.7rem);
@@ -231,6 +247,18 @@ body.cursor-ready #cursor-ring { opacity: 1; }
   color: var(--text-mid);
   opacity: 0;
 }
+/* Typewriter blinking caret */
+.tw-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--text-mid);
+  animation: blink 1s step-end infinite;
+}
+.tw-cursor.done { animation: none; opacity: 0; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 .hero-actions {
   margin-top: clamp(32px, 4vw, 48px);
   display: flex;
@@ -968,6 +996,19 @@ body.cursor-ready #cursor-ring { opacity: 1; }
   transition: opacity .9s cubic-bezier(.33,1,.68,1), transform .9s cubic-bezier(.33,1,.68,1);
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Portfolio cards cascade in row by row */
+.portfolio-grid .portfolio-item.reveal { transition-delay: 0ms; }
+.portfolio-grid .portfolio-item.reveal:nth-child(2n) { transition-delay: 90ms; }
+.portfolio-grid .portfolio-item.reveal:nth-child(n+3) { transition-delay: 120ms; }
+.portfolio-grid .portfolio-item.reveal:nth-child(n+5) { transition-delay: 200ms; }
+
+/* Smooth fade while i18n swaps text on language toggle.
+   Hero is excluded — GSAP owns its opacity during the entrance and a CSS
+   transition there would fight the per-frame tween. */
+[data-i18n] { transition: opacity .28s ease; }
+#hero [data-i18n] { transition: none; }
+body.lang-swapping [data-i18n] { opacity: 0; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {

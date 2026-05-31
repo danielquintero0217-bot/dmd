@@ -36,9 +36,9 @@ const translations = {
     stat_brands: 'Brands Worldwide',
     stat_inhouse: 'In-House Production',
     team_tag: 'The Studio',
-    role_diego: 'Director & Cinematographer',
-    role_mateo: 'Producer & Editor',
-    role_daniel: 'Creative Director & Post',
+    role_diego: 'Creative Director · Cinematographer',
+    role_mateo: 'Creative Director · Cinematographer',
+    role_daniel: 'Creative Director · Editor',
 
     cta_tag: "Let's Work Together",
     cta_title_line1: "Let's create",
@@ -115,9 +115,9 @@ const translations = {
     stat_brands: 'Marcas en el Mundo',
     stat_inhouse: 'Producción Propia',
     team_tag: 'El Estudio',
-    role_diego: 'Director y Director de Foto',
-    role_mateo: 'Productor y Editor',
-    role_daniel: 'Director Creativo y Post',
+    role_diego: 'Director Creativo · Cinematógrafo',
+    role_mateo: 'Director Creativo · Cinematógrafo',
+    role_daniel: 'Director Creativo · Editor',
 
     cta_tag: 'Trabajemos Juntos',
     cta_title_line1: 'Creemos algo',
@@ -198,6 +198,9 @@ function applyTranslations(lang) {
     const hovered = $('.portfolio-item:hover');
     if (hovered) follower.textContent = hovered.getAttribute(`data-project-${lang}`) || hovered.getAttribute('data-project-en') || '';
   }
+
+  /* re-run the hero typewriter with the freshly-swapped tagline text */
+  if (typeof window.__dmdRetypeTagline === 'function') window.__dmdRetypeTagline();
 }
 
 function initI18n() {
@@ -206,8 +209,15 @@ function initI18n() {
 
   $('#lang-toggle')?.addEventListener('click', () => {
     const next = currentLang === 'en' ? 'es' : 'en';
-    applyTranslations(next);
     localStorage.setItem('dmd-lang', next);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { applyTranslations(next); return; }
+    /* brief fade-out → swap → fade-in for a smoother transition */
+    document.body.classList.add('lang-swapping');
+    setTimeout(() => {
+      applyTranslations(next);
+      document.body.classList.remove('lang-swapping');
+    }, 260);
   });
 }
 
@@ -476,21 +486,22 @@ function initGsap() {
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) {
-    gsap.set('.hero-tag, .wm-letter, .hero-founders, .hero-tagline, .hero-actions', { opacity: 1, y: 0 });
+    gsap.set('.hero-tag, .wm-letter, .hero-founders, .hero-tagline, .hero-actions', { opacity: 1, y: 0, filter: 'blur(0px)' });
     return;
   }
 
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  tl.fromTo('.hero-tag', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
-    .fromTo('.wm-letter', { opacity: 0, yPercent: 22 }, { opacity: 1, yPercent: 0, duration: 1.1, stagger: 0.12 }, '-=0.3')
-    .fromTo('.hero-founders', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.5')
+  tl.fromTo('.hero-tag', { opacity: 0, y: 14, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, delay: 0.2 })
+    .fromTo('.wm-letter', { opacity: 0, yPercent: 22, filter: 'blur(12px)' }, { opacity: 1, yPercent: 0, filter: 'blur(0px)', duration: 1.1, stagger: 0.12 }, '-=0.3')
+    .fromTo('.hero-founders', { opacity: 0, y: 16, filter: 'blur(5px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9 }, '-=0.5')
     .fromTo('.hero-tagline', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.6')
     .fromTo('.hero-actions', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5');
 
-  /* Subtle wordmark drift on scroll */
+  /* Subtle hero drift on scroll — moves the whole block as a unit so the giant
+     wordmark never collides with the founders line below it. */
   if (typeof ScrollTrigger !== 'undefined') {
-    gsap.to('.hero-wordmark', {
-      yPercent: 14, opacity: 0.5, ease: 'none',
+    gsap.to('.hero-inner', {
+      yPercent: 8, opacity: 0.55, ease: 'none',
       scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
     });
     $$('.media-still, .media-video').forEach(media => {
@@ -519,6 +530,138 @@ function initSmoothScroll() {
 }
 
 /* ══════════════════════════════════
+   MAGNETIC BUTTONS + PORTFOLIO FOLLOW
+══════════════════════════════════ */
+function initMagnetic() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  $$('.btn-primary, .btn-secondary, .hero-cta, .filter-btn, .modal-cta, .nav-logo').forEach(el => {
+    el.style.transition = 'transform .35s cubic-bezier(.25,.46,.45,.94), color .3s ease, border-color .3s ease, background .3s ease';
+    el.style.willChange = 'transform';
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const mx = e.clientX - (r.left + r.width / 2);
+      const my = e.clientY - (r.top + r.height / 2);
+      const clamp = (v) => Math.max(-10, Math.min(10, v));
+      el.style.transform = `translate(${clamp(mx * 0.3)}px, ${clamp(my * 0.3)}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+
+  /* Portfolio cards: gentle drift toward the cursor */
+  $$('.portfolio-item').forEach(item => {
+    const media = item.querySelector('.media-wrapper');
+    if (!media) return;
+    media.style.transition = 'transform .45s cubic-bezier(.25,.46,.45,.94)';
+    item.addEventListener('mousemove', (e) => {
+      const r = item.getBoundingClientRect();
+      const mx = e.clientX - (r.left + r.width / 2);
+      const my = e.clientY - (r.top + r.height / 2);
+      media.style.transform = `translate(${mx * 0.04}px, ${my * 0.05}px)`;
+    });
+    item.addEventListener('mouseleave', () => { media.style.transform = ''; });
+  });
+}
+
+/* ══════════════════════════════════
+   FLOATING PARTICLES (subtle, white)
+══════════════════════════════════ */
+function initParticles() {
+  const canvas = document.getElementById('particles');
+  if (!canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const ctx = canvas.getContext('2d');
+  const coarse = window.matchMedia('(pointer: coarse)').matches;
+  let w, h, dpr, particles = [], raf;
+
+  const count = () => coarse ? 20 : Math.min(46, Math.round(window.innerWidth / 34));
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.width = window.innerWidth * dpr;
+    h = canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+  function make() {
+    particles = [];
+    for (let i = 0, n = count(); i < n; i++) {
+      particles.push({
+        x: Math.random() * w, y: Math.random() * h,
+        r: (Math.random() * 1.4 + 0.4) * dpr,
+        vx: (Math.random() - 0.5) * 0.12 * dpr,
+        vy: (-Math.random() * 0.18 - 0.04) * dpr,
+        a: Math.random() * 0.1 + 0.05
+      });
+    }
+  }
+  function tick() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -12) { p.y = h + 12; p.x = Math.random() * w; }
+      if (p.x < -12) p.x = w + 12;
+      if (p.x > w + 12) p.x = -12;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + p.a + ')';
+      ctx.fill();
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  resize(); make(); tick();
+  requestAnimationFrame(() => canvas.classList.add('ready'));
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resize(); make(); }, 200); });
+  document.addEventListener('visibilitychange', () => {
+    cancelAnimationFrame(raf);
+    if (!document.hidden) raf = requestAnimationFrame(tick);
+  });
+}
+
+/* ══════════════════════════════════
+   HERO TAGLINE TYPEWRITER (i18n-aware)
+══════════════════════════════════ */
+function initTypewriter() {
+  const el = $('.hero-tagline');
+  if (!el) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = null;
+
+  function type() {
+    if (timer) { clearInterval(timer); timer = null; }
+    const text = (translations[currentLang] && translations[currentLang].hero_tagline) || el.textContent;
+    if (reduce) { el.textContent = text; return; }
+    el.textContent = '';
+    const node = document.createTextNode('');
+    const caret = document.createElement('span');
+    caret.className = 'tw-cursor';
+    caret.setAttribute('aria-hidden', 'true');
+    el.appendChild(node);
+    el.appendChild(caret);
+    let i = 0;
+    timer = setInterval(() => {
+      node.nodeValue = text.slice(0, ++i);
+      if (i >= text.length) {
+        clearInterval(timer); timer = null;
+        caret.classList.add('done');
+      }
+    }, 38);
+  }
+
+  /* exposed so applyTranslations can re-type after a language swap */
+  window.__dmdRetypeTagline = type;
+
+  if (reduce) return;
+  el.textContent = '';            /* clear until the entrance reveals it */
+  setTimeout(type, 1150);         /* timed to the GSAP hero entrance */
+}
+
+/* ══════════════════════════════════
    INIT
 ══════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -530,6 +673,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initSheets();
   initFaq();
   initSmoothScroll();
+  initMagnetic();
+  initParticles();
+  initTypewriter();
   initShowreel($('#hero-video'), 'assets/showreel.mp4');
   initShowreel($('#cta-video'), 'assets/showreel.mp4');
 });

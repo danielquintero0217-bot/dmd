@@ -17,6 +17,9 @@
 </head>
 <body>
 
+  <!-- Floating particles layer -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+
   <!-- Custom cursor -->
   <div id="cursor-dot" aria-hidden="true"></div>
   <div id="cursor-ring" aria-hidden="true"></div>
@@ -114,7 +117,7 @@
 
     <div class="portfolio-grid" id="portfolio-grid">
 
-      <article class="portfolio-item" data-cat="brand"
+      <article class="portfolio-item reveal" data-cat="brand"
         data-project-en="Nike — Brand Film" data-project-es="Nike — Film de Marca"
         data-category="Brand Film" data-year="2025"
         data-desc-en="A cinematic brand film blending sport, motion and texture — shot and finished entirely in-house."
@@ -137,7 +140,7 @@
         </div>
       </article>
 
-      <article class="portfolio-item" data-cat="fashion"
+      <article class="portfolio-item reveal" data-cat="fashion"
         data-project-en="Dior — Editorial" data-project-es="Dior — Editorial"
         data-category="Editorial" data-year="2025"
         data-desc-en="A fashion editorial piece — restrained, tactile and lit for skin and fabric."
@@ -160,7 +163,7 @@
         </div>
       </article>
 
-      <article class="portfolio-item" data-cat="campaign"
+      <article class="portfolio-item reveal" data-cat="campaign"
         data-project-en="Adidas — Global Campaign" data-project-es="Adidas — Campaña Global"
         data-category="Campaign" data-year="2024"
         data-desc-en="A multi-market campaign built for performance — energetic cutdowns across formats."
@@ -183,7 +186,7 @@
         </div>
       </article>
 
-      <article class="portfolio-item" data-cat="streaming"
+      <article class="portfolio-item reveal" data-cat="streaming"
         data-project-en="Netflix — Show Promo" data-project-es="Netflix — Promo de Serie"
         data-category="Promo" data-year="2024"
         data-desc-en="Promotional content for a streaming title — trailer logic, paced for retention."
@@ -206,7 +209,7 @@
         </div>
       </article>
 
-      <article class="portfolio-item" data-cat="fashion"
+      <article class="portfolio-item reveal" data-cat="fashion"
         data-project-en="Gucci — Lookbook SS26" data-project-es="Gucci — Lookbook PV26"
         data-category="Lookbook" data-year="2026"
         data-desc-en="A seasonal lookbook in motion — fabric, silhouette and movement in long takes."
@@ -229,13 +232,13 @@
         </div>
       </article>
 
-      <article class="portfolio-item" data-cat="streaming"
-        data-project-en="Padoa — Streaming Series" data-project-es="Padoa — Serie en Streaming"
+      <article class="portfolio-item reveal" data-cat="streaming"
+        data-project-en="Padova — Streaming Series" data-project-es="Padova — Serie en Streaming"
         data-category="Streaming" data-year="2026"
-        data-desc-en="Streaming content for Padoa, a Colombian fashion label — an episodic format built around the collection."
-        data-desc-es="Contenido en streaming para Padoa, marca de ropa colombiana — un formato episódico construido alrededor de la colección."
+        data-desc-en="Streaming content for Padova, a Colombian fashion label — an episodic format built around the collection."
+        data-desc-es="Contenido en streaming para Padova, marca de ropa colombiana — un formato episódico construido alrededor de la colección."
         data-role-en="Concept · Direction · Full Production" data-role-es="Concepto · Dirección · Producción integral"
-        role="button" tabindex="0" aria-label="Padoa Streaming project">
+        role="button" tabindex="0" aria-label="Padova Streaming project">
         <div class="media-wrapper">
           <div class="media-still p6"></div>
           <div class="media-video v6">
@@ -247,7 +250,7 @@
           <span class="media-num">06</span>
         </div>
         <div class="item-caption">
-          <span class="cap-name">Padoa</span>
+          <span class="cap-name">Padova</span>
           <span class="cap-cat" data-category-label>Streaming · 2026</span>
         </div>
       </article>
@@ -332,7 +335,7 @@
           </div>
           <figcaption>
             <span class="team-name">Diego Zapata</span>
-            <span class="team-role" data-i18n="role_diego">Director &amp; Cinematographer</span>
+            <span class="team-role" data-i18n="role_diego">Creative Director · Cinematographer</span>
           </figcaption>
         </figure>
         <figure class="team-member reveal" style="transition-delay:90ms" role="listitem">
@@ -341,7 +344,7 @@
           </div>
           <figcaption>
             <span class="team-name">Mateo Barreto</span>
-            <span class="team-role" data-i18n="role_mateo">Producer &amp; Editor</span>
+            <span class="team-role" data-i18n="role_mateo">Creative Director · Cinematographer</span>
           </figcaption>
         </figure>
         <figure class="team-member reveal" style="transition-delay:180ms" role="listitem">
@@ -350,7 +353,7 @@
           </div>
           <figcaption>
             <span class="team-name">Daniel Quintero</span>
-            <span class="team-role" data-i18n="role_daniel">Creative Director &amp; Post</span>
+            <span class="team-role" data-i18n="role_daniel">Creative Director · Editor</span>
           </figcaption>
         </figure>
       </div>
@@ -552,7 +555,7 @@
 
   <!-- ═══ FOOTER ═══ -->
   <footer id="footer" aria-label="Footer">
-    <div class="footer-top">
+    <div class="footer-top reveal">
       <div class="footer-brand">
         <span class="footer-logo">DMD</span>
         <p class="footer-tagline" data-i18n="footer_tagline">High-End Audiovisual Production</p>
