@@ -7,7 +7,7 @@
 /* ── TRANSLATIONS ── */
 const translations = {
   en: {
-    nav_work: 'Work', nav_about: 'About', nav_contact: 'Contact',
+    nav_work: 'Work', nav_about: 'About', nav_contact: 'Contact', nav_rental: 'Gear',
 
     hero_tag: 'Audiovisual Production · Cali, Colombia',
     hero_founders: 'Diego Zapata — Mateo Barreto — Daniel Quintero',
@@ -27,6 +27,10 @@ const translations = {
 
     modal_role: 'Role', modal_year: 'Year',
     modal_cta: 'Start a project like this →',
+    success_title: 'Request Sent!',
+    success_desc: "We'll confirm availability within 24 hours. Keep an eye on your inbox.",
+    success_gcal: 'Add to Google Calendar',
+    success_back: '← Back to Gear',
 
     about_tag: 'About DMD',
     about_title: 'We make brands move.',
@@ -86,7 +90,7 @@ const translations = {
   },
 
   es: {
-    nav_work: 'Trabajo', nav_about: 'Nosotros', nav_contact: 'Contacto',
+    nav_work: 'Trabajo', nav_about: 'Nosotros', nav_contact: 'Contacto', nav_rental: 'Rental',
 
     hero_tag: 'Producción Audiovisual · Cali, Colombia',
     hero_founders: 'Diego Zapata — Mateo Barreto — Daniel Quintero',
@@ -106,6 +110,10 @@ const translations = {
 
     modal_role: 'Rol', modal_year: 'Año',
     modal_cta: 'Quiero un proyecto así →',
+    success_title: '¡Solicitud Enviada!',
+    success_desc: 'Confirmaremos disponibilidad en menos de 24 horas. Revisa tu bandeja de entrada.',
+    success_gcal: 'Añadir a Google Calendar',
+    success_back: '← Volver al Catálogo',
 
     about_tag: 'Sobre DMD',
     about_title: 'Hacemos que las marcas se muevan.',

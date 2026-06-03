@@ -344,6 +344,20 @@
       pointer-events: none;
     }
     .gear-card:hover::before { opacity: 1; }
+    .gear-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      opacity: 0.85;
+      transition: opacity .3s ease, transform .4s ease;
+      background: var(--bg-2);
+    }
+    .gear-card:hover .gear-img {
+      opacity: 1;
+      transform: scale(1.02);
+    }
     .gear-card.selected {
       border-color: rgba(234,234,234,0.35);
       box-shadow: 0 0 0 1px rgba(234,234,234,0.15), 0 12px 40px rgba(0,0,0,0.5);
@@ -1238,6 +1252,10 @@
         </div>
         <h2 class="success-title" data-i18n="success_title">Request Sent!</h2>
         <p class="success-desc" data-i18n="success_desc">We'll confirm availability within 24 hours. Keep an eye on your inbox.</p>
+        <a id="gcal-link" href="#" target="_blank" rel="noopener" class="btn-confirm-cta" style="width:auto; padding:12px 24px; margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span data-i18n="success_gcal" style="margin-left:8px;">Add to Google Calendar</span>
+        </a>
         <button class="success-back" id="success-back" data-i18n="success_back">← Back to Gear</button>
       </div>
     </div>
@@ -1294,7 +1312,7 @@
   /* ─── i18n STRINGS ─── */
   const I18N = {
     en: {
-      nav_work:'Work', nav_about:'About', nav_contact:'Contact', nav_rental:'Rental',
+      nav_work:'Work', nav_about:'About', nav_contact:'Contact', nav_rental:'Gear',
       rental_tag:'Equipment Rental · Cali, Colombia',
       rental_hero_title:'The Gear.',
       rental_hero_sub:'Cinema-grade equipment. Available to rent in Cali.',
@@ -1317,7 +1335,7 @@
       footer_legal:'© 2026 DMD. All rights reserved.',
     },
     es: {
-      nav_work:'Trabajo', nav_about:'Nosotros', nav_contact:'Contacto', nav_rental:'Renta',
+      nav_work:'Trabajo', nav_about:'Nosotros', nav_contact:'Contacto', nav_rental:'Rental',
       rental_tag:'Arriendo de Equipos · Cali, Colombia',
       rental_hero_title:'El Equipo.',
       rental_hero_sub:'Equipos de cine. Disponibles para arrendar en Cali.',
@@ -1407,6 +1425,7 @@
       const isSelected = selectedItems.has(item.id);
 
       card.innerHTML = `
+        <img src="assets/gear/${item.id}.jpg" class="gear-img" alt="${item.name}" loading="lazy" onerror="this.style.display='none'">
         <div class="gear-card-top">
           <span class="gear-cat-tag">${catLabel}</span>
           <div class="gear-check" aria-hidden="true">
@@ -1719,7 +1738,12 @@
         `Equipment:\n${selectedNames}\n\n` +
         `Rental Period: ${formatDate(startDate)} → ${formatDate(endDate)} (${days} day${days !== 1 ? 's' : ''})\n` +
         `Daily Total:   $${daily.toLocaleString()} USD\n` +
-        `Grand Total:   $${total.toLocaleString()} USD`,
+        `Grand Total:   $${total.toLocaleString()} USD\n\n` +
+        `--- ZAPIER AUTOMATION DATA ---\n` +
+        `z_startDate: ${startDate}\n` +
+        `z_endDate: ${endDate}\n` +
+        `z_clientName: ${clientName}\n` +
+        `z_clientEmail: ${clientEmail}`,
       botcheck: ''
     };
 
@@ -1741,6 +1765,22 @@
     calendarBtn.disabled = false;
     calendarBtn.classList.remove('loading');
     confirmFormView.style.display = 'none';
+    
+    // Generate Google Calendar Link for client
+    if (startDate && endDate) {
+      const sDate = new Date(startDate + 'T00:00:00');
+      const eDate = new Date(endDate + 'T00:00:00');
+      eDate.setDate(eDate.getDate() + 1); // All-day events need end date + 1
+      
+      const fmt = d => d.toISOString().split('T')[0].replace(/-/g, '');
+      const datesParam = `${fmt(sDate)}/${fmt(eDate)}`;
+      const textParam = encodeURIComponent(`DMD Rental: ${clientName}`);
+      const gearList = Array.from(selectedItems).map(id => GEAR.find(x => x.id === id).name).join(', ');
+      const detailsParam = encodeURIComponent(`DMD Gear Rental\nClient: ${clientName}\nGear: ${gearList}`);
+      
+      document.getElementById('gcal-link').href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${textParam}&dates=${datesParam}&details=${detailsParam}`;
+    }
+
     successScreen.classList.add('visible');
     setActiveStep(3);
   }
