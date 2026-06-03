@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DMD — Cinema-grade equipment rental in Cali, Colombia. ARRI, RED, Sony, lighting and audio gear available.">
+  <meta name="keywords" content="equipment rental, cinema gear, Cali, Colombia, ARRI, RED, camera rental, lighting rental">
+  <meta property="og:title" content="DMD — Equipment Rental">
+  <meta property="og:description" content="Cinema-grade equipment rental. Available in Cali, Colombia.">
+  <title>DMD — Equipment Rental</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <!-- Web3Forms — no external calendar API needed -->
+
+  <style>
+    /* ═══════════════════════════════════════════════════
+       DMD — rental.html  (self-contained styles)
+       Inherits design tokens from styles.css vocabulary
+       ═══════════════════════════════════════════════════ */
+
+    /* ── TOKENS ── */
+    :root {
+      --bg:          #0f0f0f;
+      --bg-2:        #141414;
+      --bg-3:        #1a1a1a;
+      --text:        #eaeaea;
+      --text-mid:    rgba(234,234,234,0.55);
+      --text-dim:    rgba(234,234,234,0.28);
+      --border:      rgba(234,234,234,0.07);
+      --border-mid:  rgba(234,234,234,0.14);
+      --accent:      rgba(234,234,234,0.9);
+      --card-sel:    rgba(234,234,234,0.12);
+
+      --ff-display: 'Cormorant Garamond', Georgia, serif;
+      --ff-body:    'DM Sans', system-ui, sans-serif;
+
+      --radius:  4px;
+      --pad-x:   clamp(24px, 6vw, 96px);
+      --section: clamp(80px, 10vw, 140px);
+      --gap:     clamp(8px, 1.2vw, 16px);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--ff-body);
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { background: none; border: none; cursor: none; color: inherit; font-family: inherit; }
+    ul { list-style: none; }
+    img, video { display: block; max-width: 100%; }
+    svg { display: block; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor-dot {
+      position: fixed;
+      width: 6px; height: 6px;
+      background: var(--text);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity .4s ease, transform .1s linear;
+      will-change: left, top;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(234,234,234,0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width .3s ease, height .3s ease, border-color .3s ease, opacity .4s ease;
+      will-change: left, top;
+    }
+    body.cursor-ready #cursor-dot,
+    body.cursor-ready #cursor-ring { opacity: 1; }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px var(--pad-x);
+      transition: background .5s ease, padding .4s ease;
+    }
+    #nav.scrolled {
+      background: rgba(15,15,15,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 16px var(--pad-x);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--ff-display);
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      transition: opacity .3s ease;
+    }
+    .nav-logo:hover { opacity: 0.7; }
+    .nav-links { display: flex; gap: 40px; }
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      transition: color .3s ease;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--text);
+      transition: width .3s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active {
+      color: var(--text);
+    }
+    .nav-links a.active::after { width: 100%; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .lang-opt { color: var(--text-dim); transition: color .25s ease; padding: 2px 0; }
+    .lang-opt.active { color: var(--text); }
+    .lang-sep { color: var(--text-dim); }
+    .lang-toggle:hover .lang-opt { color: var(--text); }
+
+    /* ── HERO STRIP ── */
+    #hero-rental {
+      padding: 160px var(--pad-x) clamp(64px, 8vw, 100px);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-rental-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(120% 120% at 30% 50%, #1a1a1a 0%, #111 45%, #0d0d0d 100%);
+      background-size: 160% 160%;
+      animation: heroDrift 18s ease-in-out infinite alternate;
+    }
+    @keyframes heroDrift {
+      from { background-position: 20% 40%; }
+      to   { background-position: 80% 60%; }
+    }
+    .hero-rental-grain {
+      position: absolute; inset: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .hero-rental-inner {
+      position: relative; z-index: 2;
+      max-width: 900px;
+    }
+    .hero-rental-tag {
+      display: block;
+      font-size: clamp(0.58rem, 0.75vw, 0.68rem);
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: clamp(18px, 2.5vw, 32px);
+    }
+    .hero-rental-title {
+      font-family: var(--ff-display);
+      font-size: clamp(5rem, 14vw, 13rem);
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .hero-rental-title em {
+      font-style: italic;
+      color: var(--text-mid);
+    }
+    .hero-rental-sub {
+      margin-top: clamp(20px, 3vw, 36px);
+      font-family: var(--ff-display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 580px;
+      line-height: 1.45;
+    }
+
+    /* ── PROCESS STEPS ── */
+    #process-bar {
+      padding: 0 var(--pad-x);
+      margin: clamp(40px, 5vw, 64px) 0 0;
+      position: relative; z-index: 2;
+    }
+    .process-steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      border-radius: 999px;
+      overflow: hidden;
+      width: fit-content;
+    }
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color .3s ease, background .3s ease;
+      position: relative;
+      white-space: nowrap;
+    }
+    .step-pill .step-num {
+      font-family: var(--ff-display);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-dim);
+      transition: color .3s ease;
+    }
+    .step-pill.active {
+      background: rgba(234,234,234,0.06);
+      color: var(--text);
+    }
+    .step-pill.active .step-num { color: var(--text-mid); }
+    .step-pill.completed { color: var(--text-dim); }
+    .step-pill.completed .step-num { color: var(--text-dim); }
+    .step-arrow {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      padding: 0 4px;
+      opacity: 0.4;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .rental-section {
+      padding: clamp(48px, 6vw, 80px) var(--pad-x);
+    }
+    .section-tag-r {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
+    .section-title-r {
+      font-family: var(--ff-display);
+      font-size: clamp(1.8rem, 3.5vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 36px;
+    }
+
+    /* ── CATEGORY FILTER BAR ── */
+    #filter-section {
+      padding: clamp(32px, 4vw, 48px) var(--pad-x) 0;
+      border-top: 1px solid var(--border);
+    }
+    .cat-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .cat-btn {
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 9px 20px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: color .3s ease, border-color .3s ease, background .3s ease;
+    }
+    .cat-btn:hover { color: var(--text-mid); border-color: var(--border-mid); }
+    .cat-btn.active {
+      color: var(--bg);
+      background: var(--text);
+      border-color: var(--text);
+    }
+
+    /* ── EQUIPMENT GRID ── */
+    #gear-section {
+      padding: clamp(32px, 4vw, 52px) var(--pad-x) clamp(80px, 10vw, 140px);
+    }
+    .gear-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 1.8vw, 24px);
+    }
+
+    /* GEAR CARD */
+    .gear-card {
+      background: var(--bg-3);
+      border: 1px solid #2a2a2a;
+      padding: clamp(20px, 2.5vw, 30px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease, opacity .4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .gear-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(120% 80% at 50% 0%, rgba(234,234,234,0.025) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity .4s ease;
+      pointer-events: none;
+    }
+    .gear-card:hover::before { opacity: 1; }
+    .gear-card.selected {
+      border-color: rgba(234,234,234,0.35);
+      box-shadow: 0 0 0 1px rgba(234,234,234,0.15), 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .gear-card.hidden {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+    }
+    .gear-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .gear-cat-tag {
+      font-size: 0.58rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-variant: small-caps;
+    }
+    .gear-check {
+      width: 18px; height: 18px;
+      border: 1px solid rgba(234,234,234,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .3s ease, border-color .3s ease;
+    }
+    .gear-card.selected .gear-check {
+      background: var(--text);
+      border-color: var(--text);
+    }
+    .gear-check svg { opacity: 0; transition: opacity .2s ease; }
+    .gear-card.selected .gear-check svg { opacity: 1; }
+    .gear-name {
+      font-family: var(--ff-display);
+      font-size: clamp(1.15rem, 1.6vw, 1.55rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+    }
+    .gear-specs {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+    .gear-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .gear-price {
+      font-family: var(--ff-display);
+      font-size: clamp(1.2rem, 1.8vw, 1.65rem);
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .gear-price span {
+      font-family: var(--ff-body);
+      font-size: 0.65rem;
+      font-weight: 300;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-left: 4px;
+    }
+    .gear-select-btn {
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border-mid);
+      border-radius: 999px;
+      color: var(--text-mid);
+      transition: background .3s ease, color .3s ease, border-color .3s ease;
+      cursor: none;
+    }
+    .gear-card.selected .gear-select-btn {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+    .gear-select-btn:hover { border-color: var(--text-mid); color: var(--text); }
+    .gear-card.selected .gear-select-btn:hover {
+      background: #fff;
+      color: var(--bg);
+    }
+
+    /* ── FLOATING SELECTION BAR ── */
+    #selection-bar {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      z-index: 800;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      border-radius: 999px;
+      padding: 14px 14px 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(234,234,234,0.05);
+      transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .35s ease;
+      white-space: nowrap;
+      opacity: 0;
+    }
+    #selection-bar.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .sel-bar-info {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      letter-spacing: 0.02em;
+    }
+    .sel-bar-info strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+    .sel-bar-btn {
+      background: var(--text);
+      color: var(--bg);
+      font-family: var(--ff-body);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 11px 22px;
+      border-radius: 999px;
+      transition: background .25s ease, transform .2s ease;
+      cursor: none;
+    }
+    .sel-bar-btn:hover {
+      background: #fff;
+      transform: scale(1.02);
+    }
+    .sel-bar-clear {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 4px 8px;
+      transition: color .25s ease;
+      cursor: none;
+    }
+    .sel-bar-clear:hover { color: var(--text-mid); }
+
+    /* ── DATE PICKER PANEL ── */
+    #date-panel {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(480px, 100vw);
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg-2);
+      border-left: 1px solid var(--border-mid);
+      z-index: 9000;
+      transform: translateX(100%);
+      transition: transform .48s cubic-bezier(.25,.46,.45,.94);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    #date-panel.open {
+      transform: translateX(0);
+    }
+    .date-panel-inner {
+      padding: clamp(28px, 4vw, 48px);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      flex: 1;
+    }
+    .date-panel-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-mid); transition: color .3s ease;
+    }
+    .date-panel-close:hover { color: var(--text); }
+    .date-panel-head { margin-top: 20px; }
+    .date-panel-tag {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+    .date-panel-title {
+      font-family: var(--ff-display);
+      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    .date-panel-title em { font-style: italic; color: var(--text-mid); }
+
+    /* Date inputs */
+    .date-inputs { display: flex; flex-direction: column; gap: 16px; }
+    .date-field { display: flex; flex-direction: column; gap: 8px; }
+    .date-field label {
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .date-field input[type="date"] {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text);
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      font-weight: 300;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      transition: border-color .3s ease;
+      cursor: none;
+      color-scheme: dark;
+    }
+    .date-field input[type="date"]:focus {
+      outline: none;
+      border-color: var(--text-mid);
+    }
+
+    /* Date summary */
+    .date-summary {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .date-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .date-summary-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+    .date-summary-val {
+      font-family: var(--ff-display);
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .date-summary-total-row {
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .date-summary-total-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      font-weight: 400;
+    }
+    .date-summary-total-val {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    /* Selected items list in date panel */
+    .selected-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .selected-list-title {
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .selected-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      color: var(--text-mid);
+    }
+    .selected-list-item-name { font-weight: 300; }
+    .selected-list-item-price { font-family: var(--ff-display); color: var(--text); }
+
+    .date-panel-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 16px;
+    }
+    .btn-panel-primary {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--text);
+      color: var(--bg);
+      font-family: var(--ff-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px;
+      border-radius: var(--radius);
+      transition: background .3s ease, transform .2s ease;
+      cursor: none;
+    }
+    .btn-panel-primary:hover { background: #fff; transform: translateY(-1px); }
+    .btn-panel-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .date-error {
+      font-size: 0.72rem;
+      color: #e0a0a0;
+      letter-spacing: 0.02em;
+      min-height: 1.1em;
+    }
+
+    /* Panel backdrop */
+    #panel-backdrop {
+      position: fixed; inset: 0;
+      z-index: 8999;
+      background: rgba(0,0,0,0);
+      pointer-events: none;
+      transition: background .4s ease;
+    }
+    #panel-backdrop.active {
+      background: rgba(0,0,0,0.6);
+      pointer-events: all;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* ── CONFIRM MODAL ── */
+    #confirm-modal {
+      position: fixed; inset: 0;
+      z-index: 9800;
+      background: rgba(10,10,10,0.97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s ease;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow-y: auto;
+    }
+    #confirm-modal.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .confirm-inner {
+      position: relative;
+      width: min(680px, 94vw);
+      background: var(--bg-2);
+      border: 1px solid var(--border-mid);
+      padding: clamp(32px, 5vw, 56px);
+      transform: translateY(24px);
+      transition: transform .4s cubic-bezier(.25,.46,.45,.94);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    #confirm-modal.open .confirm-inner { transform: translateY(0); }
+    .confirm-close {
+      position: absolute; top: 18px; right: 18px;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-mid); transition: color .3s ease;
+    }
+    .confirm-close:hover { color: var(--text); }
+    .confirm-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 12px;
+    }
+    .confirm-title {
+      font-family: var(--ff-display);
+      font-size: clamp(1.5rem, 3vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+
+    /* Order summary */
+    .order-summary {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+    .order-summary-title {
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+    .order-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+    }
+    .order-item-price { font-family: var(--ff-display); color: var(--text); }
+    .order-dates-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-mid);
+      margin-top: 4px;
+    }
+    .order-total-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+    .order-total-val {
+      font-family: var(--ff-display);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    /* Confirm form inputs */
+    .confirm-form { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .confirm-field { display: flex; flex-direction: column; gap: 7px; }
+    .confirm-field label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .confirm-field input {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text);
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      font-weight: 300;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      transition: border-color .3s ease;
+      cursor: text;
+    }
+    .confirm-field input:focus { outline: none; border-color: var(--text-mid); }
+
+    .btn-confirm-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: var(--text);
+      color: var(--bg);
+      font-family: var(--ff-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 18px 24px;
+      border-radius: var(--radius);
+      transition: background .3s ease, transform .2s ease;
+      cursor: none;
+      border: none;
+    }
+    .btn-confirm-cta:hover { background: #fff; transform: translateY(-1px); }
+    .btn-confirm-cta:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-confirm-cta svg { flex-shrink: 0; }
+    .confirm-note {
+      margin-top: 14px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-align: center;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+    .confirm-error {
+      font-size: 0.75rem;
+      color: #e0a0a0;
+      text-align: center;
+      min-height: 1.1em;
+      margin-top: 8px;
+    }
+
+    /* Loading spinner */
+    .btn-spinner {
+      width: 16px; height: 16px;
+      border: 1.5px solid rgba(15,15,15,0.3);
+      border-top-color: var(--bg);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    .btn-confirm-cta.loading .btn-spinner { display: block; }
+    .btn-confirm-cta.loading .btn-label { opacity: 0.6; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SUCCESS SCREEN ── */
+    .success-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px 0;
+      gap: 20px;
+    }
+    .success-screen.visible { display: flex; }
+    .success-check {
+      width: 72px; height: 72px;
+      border: 1px solid rgba(234,234,234,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .success-check svg {
+      width: 32px; height: 32px;
+      stroke: var(--text);
+      stroke-width: 1.5;
+      fill: none;
+    }
+    .success-title {
+      font-family: var(--ff-display);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 300;
+      color: var(--text);
+    }
+    .success-desc {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      max-width: 44ch;
+    }
+    .success-back {
+      margin-top: 12px;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      border-bottom: 1px solid var(--border-mid);
+      padding-bottom: 3px;
+      transition: color .3s ease, border-color .3s ease;
+      cursor: none;
+    }
+    .success-back:hover { color: var(--text); border-color: var(--text); }
+
+    /* ── FOOTER ── */
+    #rental-footer {
+      padding: clamp(40px, 5vw, 64px) var(--pad-x) clamp(28px, 3.5vw, 40px);
+      border-top: 1px solid var(--border);
+    }
+    .rental-footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-logo-r {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--text);
+    }
+    .footer-links-r {
+      display: flex;
+      gap: 28px;
+    }
+    .footer-links-r a {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color .3s ease;
+    }
+    .footer-links-r a:hover { color: var(--text); }
+    .footer-copy-r {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      width: 100%;
+      margin-top: 16px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ── REVEAL ANIMATIONS ── */
+    .r-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s cubic-bezier(.33,1,.68,1), transform .8s cubic-bezier(.33,1,.68,1);
+    }
+    .r-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .gear-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      #cursor-dot, #cursor-ring { display: none; }
+      button, input { cursor: pointer; }
+      input { cursor: text; }
+      .nav-links { display: none; }
+      #nav { padding: 18px var(--pad-x); }
+      .hero-rental-title { font-size: clamp(3.5rem, 18vw, 8rem); }
+      .gear-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .process-steps { flex-wrap: nowrap; overflow-x: auto; border-radius: 12px; }
+      .sel-bar-info { font-size: 0.7rem; }
+    }
+    @media (max-width: 540px) {
+      .gear-grid { grid-template-columns: 1fr; }
+      #selection-bar { width: calc(100vw - 32px); border-radius: 16px; padding: 12px 12px 12px 18px; }
+      .confirm-inner { padding: 28px 20px; }
+      .rental-footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .footer-copy-r { flex-direction: column; gap: 4px; }
+    }
+
+    /* Language transition */
+    [data-i18n] { transition: opacity .25s ease; }
+    body.lang-swapping [data-i18n] { opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor-dot" aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Panel backdrop -->
+  <div id="panel-backdrop" aria-hidden="true"></div>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="DMD Home">DMD</a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#portfolio" data-i18n="nav_work">Work</a></li>
+      <li><a href="index.html#about" data-i18n="nav_about">About</a></li>
+      <li><a href="index.html#contact" data-i18n="nav_contact">Contact</a></li>
+      <li><a href="rental.html" class="active" data-i18n="nav_rental">Rental</a></li>
+    </ul>
+    <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language EN/ES">
+      <span class="lang-opt lang-en">EN</span>
+      <span class="lang-sep">/</span>
+      <span class="lang-opt lang-es">ES</span>
+    </button>
+  </nav>
+
+  <!-- ═══ HERO STRIP ═══ -->
+  <section id="hero-rental" aria-label="Rental hero">
+    <div class="hero-rental-bg" aria-hidden="true"></div>
+    <div class="hero-rental-grain" aria-hidden="true"></div>
+    <div class="hero-rental-inner">
+      <span class="hero-rental-tag r-reveal" data-i18n="rental_tag">Equipment Rental · Cali, Colombia</span>
+      <h1 class="hero-rental-title r-reveal" style="transition-delay:80ms" data-i18n="rental_hero_title">The Gear.</h1>
+      <p class="hero-rental-sub r-reveal" style="transition-delay:160ms" data-i18n="rental_hero_sub">Cinema-grade equipment. Available to rent in Cali.</p>
+    </div>
+
+    <!-- Process steps -->
+    <div id="process-bar" class="r-reveal" style="transition-delay:240ms" aria-label="Rental steps">
+      <div class="process-steps" role="list">
+        <div class="step-pill active" id="step-1" role="listitem">
+          <span class="step-num">01</span>
+          <span data-i18n="step_browse">Browse</span>
+        </div>
+        <span class="step-arrow" aria-hidden="true">→</span>
+        <div class="step-pill" id="step-2" role="listitem">
+          <span class="step-num">02</span>
+          <span data-i18n="step_dates">Dates</span>
+        </div>
+        <span class="step-arrow" aria-hidden="true">→</span>
+        <div class="step-pill" id="step-3" role="listitem">
+          <span class="step-num">03</span>
+          <span data-i18n="step_confirm">Confirm</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CATEGORY FILTER BAR ═══ -->
+  <div id="filter-section" aria-label="Filter equipment by category">
+    <div class="cat-filters r-reveal" role="group" aria-label="Category filters">
+      <button class="cat-btn active" data-cat="all" data-i18n="cat_all">All</button>
+      <button class="cat-btn" data-cat="cameras" data-i18n="cat_cameras">Cameras</button>
+      <button class="cat-btn" data-cat="lenses" data-i18n="cat_lenses">Lenses</button>
+      <button class="cat-btn" data-cat="lighting" data-i18n="cat_lighting">Lighting</button>
+      <button class="cat-btn" data-cat="audio" data-i18n="cat_audio">Audio</button>
+      <button class="cat-btn" data-cat="support" data-i18n="cat_support">Support</button>
+    </div>
+  </div>
+
+  <!-- ═══ EQUIPMENT GRID ═══ -->
+  <section id="gear-section" aria-label="Equipment catalog">
+    <div class="gear-grid" id="gear-grid" role="list">
+      <!-- Cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- ═══ FLOATING SELECTION BAR ═══ -->
+  <div id="selection-bar" role="status" aria-live="polite" aria-label="Selection summary">
+    <div class="sel-bar-info">
+      <strong id="sel-count">0</strong>&thinsp;<span data-i18n="sel_items">items selected</span>
+      &nbsp;·&nbsp; Est. <strong>$<span id="sel-total">0</span></strong><span style="font-size:0.65rem;color:var(--text-dim);letter-spacing:0.1em">/day</span>
+    </div>
+    <button class="sel-bar-clear" id="sel-clear" data-i18n="sel_clear" aria-label="Clear selection">Clear</button>
+    <button class="sel-bar-btn" id="pick-dates-btn" data-i18n="sel_pick_dates" aria-label="Pick rental dates">Pick Dates →</button>
+  </div>
+
+  <!-- ═══ DATE PICKER PANEL ═══ -->
+  <aside id="date-panel" role="dialog" aria-modal="true" aria-label="Select rental dates" aria-hidden="true">
+    <button class="date-panel-close" id="date-panel-close" aria-label="Close date panel">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </button>
+
+    <div class="date-panel-inner">
+      <div class="date-panel-head">
+        <span class="date-panel-tag" data-i18n="dates_tag">Step 02 — Rental Period</span>
+        <h2 class="date-panel-title" data-i18n="dates_title">Select <em>Rental Dates</em></h2>
+      </div>
+
+      <!-- Selected items recap -->
+      <div class="selected-list" id="panel-items-list" aria-label="Selected items">
+        <p class="selected-list-title" data-i18n="panel_your_items">Your Selection</p>
+        <!-- populated by JS -->
+      </div>
+
+      <!-- Date inputs -->
+      <div class="date-inputs">
+        <div class="date-field">
+          <label for="start-date" data-i18n="dates_start">Start Date</label>
+          <input type="date" id="start-date" name="start-date" aria-label="Start date" min="">
+        </div>
+        <div class="date-field">
+          <label for="end-date" data-i18n="dates_end">End Date</label>
+          <input type="date" id="end-date" name="end-date" aria-label="End date" min="">
+        </div>
+        <p class="date-error" id="date-error" role="alert" aria-live="polite"></p>
+      </div>
+
+      <!-- Cost summary -->
+      <div class="date-summary" id="date-summary" aria-label="Cost breakdown">
+        <div class="date-summary-row">
+          <span class="date-summary-label" data-i18n="summary_gear_day">Gear / day</span>
+          <span class="date-summary-val">$<span id="sum-per-day">0</span></span>
+        </div>
+        <div class="date-summary-row">
+          <span class="date-summary-label" data-i18n="summary_days">Days</span>
+          <span class="date-summary-val" id="sum-days">—</span>
+        </div>
+        <div class="date-summary-row date-summary-total-row">
+          <span class="date-summary-total-label" data-i18n="summary_total">Total Estimate</span>
+          <span class="date-summary-total-val">$<span id="sum-total">0</span></span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="date-panel-cta">
+        <button class="btn-panel-primary" id="review-btn" data-i18n="dates_cta" aria-label="Review rental">Review Rental →</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ CONFIRM MODAL ═══ -->
+  <div id="confirm-modal" role="dialog" aria-modal="true" aria-label="Confirm rental" aria-hidden="true">
+    <div class="confirm-inner">
+      <button class="confirm-close" id="confirm-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+
+      <!-- Booking form view -->
+      <div id="confirm-form-view">
+        <span class="confirm-tag" data-i18n="confirm_tag">Step 03 — Confirm Rental</span>
+        <h2 class="confirm-title" data-i18n="confirm_title">Review &amp; Confirm</h2>
+
+        <!-- Order summary -->
+        <div class="order-summary" id="order-summary" aria-label="Order summary">
+          <p class="order-summary-title" data-i18n="confirm_summary">Rental Summary</p>
+          <div class="order-items-list" id="order-items-list"></div>
+          <div class="order-dates-row">
+            <span class="date-summary-label" data-i18n="confirm_dates">Dates</span>
+            <span style="font-size:0.82rem;color:var(--text-mid)" id="order-dates">—</span>
+          </div>
+          <div class="order-total-row">
+            <span class="order-total-label" data-i18n="confirm_total">Total Estimate</span>
+            <span class="order-total-val">$<span id="order-total">0</span></span>
+          </div>
+        </div>
+
+        <!-- Client details form -->
+        <div class="confirm-form" id="confirm-form">
+          <div class="confirm-field">
+            <label for="client-name" data-i18n="confirm_name">Your Name</label>
+            <input type="text" id="client-name" name="name" autocomplete="name" required placeholder="e.g. Sofia Morales">
+          </div>
+          <div class="confirm-field">
+            <label for="client-email" data-i18n="confirm_email">Your Email</label>
+            <input type="email" id="client-email" name="email" autocomplete="email" required placeholder="e.g. sofia@studio.com">
+          </div>
+        </div>
+
+        <button class="btn-confirm-cta" id="confirm-calendar-btn" type="button" aria-label="Send rental request">
+          <div class="btn-spinner" aria-hidden="true"></div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          <span class="btn-label" data-i18n="confirm_cta">Send Rental Request</span>
+        </button>
+        <p class="confirm-note" data-i18n="confirm_note">We'll review your request and confirm availability within 24 hours.</p>
+        <p class="confirm-error" id="confirm-error" role="alert" aria-live="polite"></p>
+      </div>
+
+      <!-- Success view -->
+      <div class="success-screen" id="success-screen" aria-label="Rental confirmed">
+        <div class="success-check" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <polyline points="6 16 13 23 26 9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="success-title" data-i18n="success_title">Request Sent!</h2>
+        <p class="success-desc" data-i18n="success_desc">We'll confirm availability within 24 hours. Keep an eye on your inbox.</p>
+        <button class="success-back" id="success-back" data-i18n="success_back">← Back to Gear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer id="rental-footer" aria-label="Footer">
+    <div class="rental-footer-inner">
+      <a href="index.html" class="footer-logo-r">DMD</a>
+      <nav class="footer-links-r" aria-label="Footer navigation">
+        <a href="index.html#portfolio" data-i18n="nav_work">Work</a>
+        <a href="index.html#about" data-i18n="nav_about">About</a>
+        <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+        <a href="rental.html" data-i18n="nav_rental">Rental</a>
+      </nav>
+    </div>
+    <div class="footer-copy-r">
+      <span data-i18n="footer_legal">© 2026 DMD. All rights reserved.</span>
+      <span>Cali, Colombia</span>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       JAVASCRIPT
+       ═══════════════════════════════════════ -->
+  <script>
+  'use strict';
+
+  /* ─── GEAR DATA ─── */
+  const GEAR = [
+    // Cameras
+    { id:'c1',  cat:'cameras',  name:'ARRI Alexa 35',                specs:'LF Sensor · 4.6K · Built-in ND',       price:850 },
+    { id:'c2',  cat:'cameras',  name:'RED V-RAPTOR 8K',              specs:'8K · 120fps · Global Shutter',         price:650 },
+    { id:'c3',  cat:'cameras',  name:'Sony FX9',                     specs:'Full Frame · 6K · Dual Base ISO',      price:350 },
+    { id:'c4',  cat:'cameras',  name:'Blackmagic URSA Mini Pro G2',  specs:'4.6K · 12 stops DR · EF Mount',       price:280 },
+    // Lenses
+    { id:'l1',  cat:'lenses',   name:'Sigma Cine Prime Set',         specs:'6 Lenses · T1.5 · PL Mount',          price:400 },
+    { id:'l2',  cat:'lenses',   name:'Zeiss CP.3 Set',               specs:'5 Lenses · T2.1 · PL/EF',             price:380 },
+    { id:'l3',  cat:'lenses',   name:'Canon CN-E 50mm T1.3',         specs:'EF Cinema · Full Frame',               price:95  },
+    // Lighting
+    { id:'li1', cat:'lighting', name:'ARRI SkyPanel S60-C',          specs:'RGB+W · Soft · 60°',                  price:180 },
+    { id:'li2', cat:'lighting', name:'Aputure 600d Pro',             specs:'600W · Bowens · 5600K',               price:120 },
+    { id:'li3', cat:'lighting', name:'Nanlite Forza 720B Kit',       specs:'Bi-Color · 720W · 2 heads',           price:95  },
+    // Audio
+    { id:'a1',  cat:'audio',    name:'Sound Devices 888',            specs:'16-track · Timecode · SL-6',          price:150 },
+    { id:'a2',  cat:'audio',    name:'Sennheiser MKH 416',           specs:'Shotgun · Supercardioid · XLR',       price:45  },
+    { id:'a3',  cat:'audio',    name:'DPA 4061 Lavalier Kit',        specs:'2x Lavs · Omni · Miniature',          price:40  },
+    // Support
+    { id:'s1',  cat:'support',  name:'DJI Ronin 4D',                 specs:'6-Axis Gimbal · 8K · LiDAR',          price:320 },
+    { id:'s2',  cat:'support',  name:'Sachtler Video 20',            specs:'75mm Bowl · 20kg payload',            price:85  },
+    { id:'s3',  cat:'support',  name:'Dana Dolly Kit',               specs:'Portable Dolly · Track 6ft',          price:150 },
+  ];
+
+  /* ─── i18n STRINGS ─── */
+  const I18N = {
+    en: {
+      nav_work:'Work', nav_about:'About', nav_contact:'Contact', nav_rental:'Rental',
+      rental_tag:'Equipment Rental · Cali, Colombia',
+      rental_hero_title:'The Gear.',
+      rental_hero_sub:'Cinema-grade equipment. Available to rent in Cali.',
+      step_browse:'Browse', step_dates:'Dates', step_confirm:'Confirm',
+      cat_all:'All', cat_cameras:'Cameras', cat_lenses:'Lenses',
+      cat_lighting:'Lighting', cat_audio:'Audio', cat_support:'Support',
+      sel_items:'items selected', sel_clear:'Clear', sel_pick_dates:'Pick Dates →',
+      dates_tag:'Step 02 — Rental Period', dates_title:'Select Rental Dates',
+      dates_start:'Start Date', dates_end:'End Date', dates_cta:'Review Rental →',
+      panel_your_items:'Your Selection',
+      summary_gear_day:'Gear / day', summary_days:'Days', summary_total:'Total Estimate',
+      confirm_tag:'Step 03 — Confirm Rental', confirm_title:'Review & Confirm',
+      confirm_summary:'Rental Summary', confirm_dates:'Dates',
+      confirm_total:'Total Estimate', confirm_name:'Your Name', confirm_email:'Your Email',
+      confirm_cta:'Send Rental Request',
+      confirm_note:"We'll review your request and confirm availability within 24 hours.",
+      success_title:'Request Sent!',
+      success_desc:"We'll confirm availability within 24 hours. Keep an eye on your inbox.",
+      success_back:'← Back to Gear',
+      footer_legal:'© 2026 DMD. All rights reserved.',
+    },
+    es: {
+      nav_work:'Trabajo', nav_about:'Nosotros', nav_contact:'Contacto', nav_rental:'Renta',
+      rental_tag:'Arriendo de Equipos · Cali, Colombia',
+      rental_hero_title:'El Equipo.',
+      rental_hero_sub:'Equipos de cine. Disponibles para arrendar en Cali.',
+      step_browse:'Catálogo', step_dates:'Fechas', step_confirm:'Confirmar',
+      cat_all:'Todo', cat_cameras:'Cámaras', cat_lenses:'Lentes',
+      cat_lighting:'Iluminación', cat_audio:'Audio', cat_support:'Soporte',
+      sel_items:'ítems seleccionados', sel_clear:'Limpiar', sel_pick_dates:'Elegir Fechas →',
+      dates_tag:'Paso 02 — Período de Arriendo', dates_title:'Seleccionar Fechas',
+      dates_start:'Fecha Inicio', dates_end:'Fecha Fin', dates_cta:'Revisar Arriendo →',
+      panel_your_items:'Tu Selección',
+      summary_gear_day:'Equipo / día', summary_days:'Días', summary_total:'Total Estimado',
+      confirm_tag:'Paso 03 — Confirmar Arriendo', confirm_title:'Revisar & Confirmar',
+      confirm_summary:'Resumen del Arriendo', confirm_dates:'Fechas',
+      confirm_total:'Total Estimado', confirm_name:'Tu Nombre', confirm_email:'Tu Email',
+      confirm_cta:'Enviar Solicitud de Arriendo',
+      confirm_note:'Revisaremos tu solicitud y confirmaremos disponibilidad en menos de 24 horas.',
+      success_title:'¡Solicitud Enviada!',
+      success_desc:'Confirmaremos disponibilidad en menos de 24 horas. Revisa tu bandeja de entrada.',
+      success_back:'← Volver al Catálogo',
+      footer_legal:'© 2026 DMD. Todos los derechos reservados.',
+    }
+  };
+
+  /* ─── STATE ─── */
+  let currentLang   = 'en';
+  let currentCat    = 'all';
+  let selectedItems = new Set(); // Set of gear IDs
+  let startDate     = '';
+  let endDate       = '';
+  let clientName    = '';
+  let clientEmail   = '';
+
+
+  /* ─── WEB3FORMS CONFIG ─── */
+  const WEB3FORMS_KEY = '67657ee8-15a8-4440-be79-deda3993db41';
+
+  /* ─── DOM REFS ─── */
+  const gearGrid        = document.getElementById('gear-grid');
+  const selectionBar    = document.getElementById('selection-bar');
+  const selCount        = document.getElementById('sel-count');
+  const selTotal        = document.getElementById('sel-total');
+  const selClear        = document.getElementById('sel-clear');
+  const pickDatesBtn    = document.getElementById('pick-dates-btn');
+  const datePanel       = document.getElementById('date-panel');
+  const panelBackdrop   = document.getElementById('panel-backdrop');
+  const datePanelClose  = document.getElementById('date-panel-close');
+  const startInput      = document.getElementById('start-date');
+  const endInput        = document.getElementById('end-date');
+  const dateError       = document.getElementById('date-error');
+  const sumPerDay       = document.getElementById('sum-per-day');
+  const sumDays         = document.getElementById('sum-days');
+  const sumTotal        = document.getElementById('sum-total');
+  const reviewBtn       = document.getElementById('review-btn');
+  const panelItemsList  = document.getElementById('panel-items-list');
+  const confirmModal    = document.getElementById('confirm-modal');
+  const confirmClose    = document.getElementById('confirm-close');
+  const orderItemsList  = document.getElementById('order-items-list');
+  const orderDates      = document.getElementById('order-dates');
+  const orderTotal      = document.getElementById('order-total');
+  const clientNameIn    = document.getElementById('client-name');
+  const clientEmailIn   = document.getElementById('client-email');
+  const calendarBtn     = document.getElementById('confirm-calendar-btn');
+  const confirmError    = document.getElementById('confirm-error');
+  const confirmFormView = document.getElementById('confirm-form-view');
+  const successScreen   = document.getElementById('success-screen');
+  const successBack     = document.getElementById('success-back');
+  const langToggle      = document.getElementById('lang-toggle');
+  const navEl           = document.getElementById('nav');
+  const step1           = document.getElementById('step-1');
+  const step2           = document.getElementById('step-2');
+  const step3           = document.getElementById('step-3');
+
+  /* ─── RENDER GEAR CARDS ─── */
+  function renderCards() {
+    gearGrid.innerHTML = '';
+    GEAR.forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'gear-card r-reveal' + (selectedItems.has(item.id) ? ' selected' : '');
+      card.dataset.id  = item.id;
+      card.dataset.cat = item.cat;
+      card.setAttribute('role', 'listitem');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', item.name);
+      card.setAttribute('aria-pressed', selectedItems.has(item.id) ? 'true' : 'false');
+
+      const catLabel = item.cat.charAt(0).toUpperCase() + item.cat.slice(1);
+      const isSelected = selectedItems.has(item.id);
+
+      card.innerHTML = `
+        <div class="gear-card-top">
+          <span class="gear-cat-tag">${catLabel}</span>
+          <div class="gear-check" aria-hidden="true">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <polyline points="1 4 3.5 7 9 1" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="gear-name">${item.name}</h3>
+        <p class="gear-specs">${item.specs}</p>
+          <div class="gear-price">
+            $${item.price.toLocaleString()}
+            <span>${currentLang === 'es' ? '/día' : '/day'}</span>
+          </div>
+          <button class="gear-select-btn" aria-label="${isSelected ? 'Deselect' : 'Select'} ${item.name}">
+            ${isSelected ? (currentLang === 'es' ? '✓ Seleccionado' : '✓ Selected') : (currentLang === 'es' ? 'Seleccionar' : 'Select')}
+          </button>
+        </div>
+      `;
+
+      // Click to select/deselect
+      card.addEventListener('click', () => toggleSelect(item.id));
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSelect(item.id); } });
+
+      if (currentCat !== 'all' && item.cat !== currentCat) {
+        card.classList.add('hidden');
+        card.style.display = 'none';
+      }
+
+      gearGrid.appendChild(card);
+    });
+    observeReveal();
+  }
+
+  /* ─── TOGGLE SELECT ─── */
+  function toggleSelect(id) {
+    if (selectedItems.has(id)) {
+      selectedItems.delete(id);
+    } else {
+      selectedItems.add(id);
+    }
+    updateCardUI(id);
+    updateSelectionBar();
+    updatePanelList();
+    updateDateSummary();
+  }
+
+  function updateCardUI(id) {
+    const card = gearGrid.querySelector(`[data-id="${id}"]`);
+    if (!card) return;
+    const isSelected = selectedItems.has(id);
+    card.classList.toggle('selected', isSelected);
+    card.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+    const btn = card.querySelector('.gear-select-btn');
+    if (btn) btn.textContent = isSelected ? '✓ Selected' : 'Select';
+  }
+
+  /* ─── SELECTION BAR ─── */
+  function updateSelectionBar() {
+    const count    = selectedItems.size;
+    const total    = getDailyTotal();
+    selCount.textContent = count;
+    selTotal.textContent  = total.toLocaleString();
+    if (count > 0) {
+      selectionBar.classList.add('visible');
+    } else {
+      selectionBar.classList.remove('visible');
+    }
+  }
+
+  function getDailyTotal() {
+    let t = 0;
+    selectedItems.forEach(id => {
+      const g = GEAR.find(x => x.id === id);
+      if (g) t += g.price;
+    });
+    return t;
+  }
+
+  function getDays() {
+    if (!startDate || !endDate) return 0;
+    const s = new Date(startDate + 'T00:00:00');
+    const e = new Date(endDate   + 'T00:00:00');
+    const diff = Math.round((e - s) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 0;
+  }
+
+  /* ─── CATEGORY FILTER ─── */
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterCards();
+    });
+  });
+
+  function filterCards() {
+    const cards = gearGrid.querySelectorAll('.gear-card');
+    cards.forEach(card => {
+      const match = currentCat === 'all' || card.dataset.cat === currentCat;
+      if (match) {
+        card.classList.remove('hidden');
+        card.style.display = '';
+        requestAnimationFrame(() => card.classList.add('visible'));
+      } else {
+        card.classList.add('hidden');
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  /* ─── DATE PANEL ─── */
+  pickDatesBtn.addEventListener('click', openDatePanel);
+  datePanelClose.addEventListener('click', closeDatePanel);
+  panelBackdrop.addEventListener('click', () => {
+    closeDatePanel();
+    closeConfirmModal();
+  });
+
+  function openDatePanel() {
+    datePanel.classList.add('open');
+    panelBackdrop.classList.add('active');
+    datePanel.setAttribute('aria-hidden', 'false');
+    // Update step indicator
+    setActiveStep(2);
+    updatePanelList();
+    updateDateSummary();
+    // Set min date = today
+    const today = new Date().toISOString().split('T')[0];
+    startInput.min = today;
+    endInput.min   = today;
+  }
+
+  function closeDatePanel() {
+    datePanel.classList.remove('open');
+    panelBackdrop.classList.remove('active');
+    datePanel.setAttribute('aria-hidden', 'true');
+    setActiveStep(1);
+  }
+
+  function updatePanelList() {
+    const items = Array.from(selectedItems).map(id => GEAR.find(x => x.id === id)).filter(Boolean);
+    const titleEl = panelItemsList.querySelector('.selected-list-title');
+    // clear previous items but keep title
+    panelItemsList.innerHTML = '';
+    if (titleEl) panelItemsList.appendChild(titleEl);
+    else {
+      const t = document.createElement('p');
+      t.className = 'selected-list-title';
+      t.setAttribute('data-i18n', 'panel_your_items');
+      t.textContent = I18N[currentLang].panel_your_items;
+      panelItemsList.appendChild(t);
+    }
+    items.forEach(g => {
+      const row = document.createElement('div');
+      row.className = 'selected-list-item';
+      row.innerHTML = `<span class="selected-list-item-name">${g.name}</span><span class="selected-list-item-price">$${g.price}/day</span>`;
+      panelItemsList.appendChild(row);
+    });
+  }
+
+  startInput.addEventListener('change', () => {
+    startDate = startInput.value;
+    if (endDate && endDate <= startDate) {
+      endDate = '';
+      endInput.value = '';
+    }
+    endInput.min = startDate;
+    updateDateSummary();
+    validateDates();
+  });
+
+  endInput.addEventListener('change', () => {
+    endDate = endInput.value;
+    updateDateSummary();
+    validateDates();
+  });
+
+  function validateDates() {
+    dateError.textContent = '';
+    if (startDate && endDate && endDate <= startDate) {
+      dateError.textContent = currentLang === 'es'
+        ? 'La fecha de fin debe ser posterior al inicio.'
+        : 'End date must be after start date.';
+      return false;
+    }
+    return true;
+  }
+
+  function updateDateSummary() {
+    const daily = getDailyTotal();
+    const days  = getDays();
+    const total = daily * days;
+    sumPerDay.textContent = daily.toLocaleString();
+    sumDays.textContent   = days > 0 ? days : '—';
+    sumTotal.textContent  = total.toLocaleString();
+    reviewBtn.disabled    = !(selectedItems.size > 0 && days > 0);
+  }
+
+  reviewBtn.addEventListener('click', () => {
+    if (!validateDates()) return;
+    if (getDays() <= 0) return;
+    datePanel.classList.remove('open');
+    datePanel.setAttribute('aria-hidden', 'true');
+    openConfirmModal();
+  });
+
+  /* ─── CONFIRM MODAL ─── */
+  function openConfirmModal() {
+    populateOrderSummary();
+    confirmFormView.style.display = '';
+    successScreen.classList.remove('visible');
+    confirmModal.classList.add('open');
+    confirmModal.setAttribute('aria-hidden', 'false');
+    panelBackdrop.classList.add('active');
+    setActiveStep(3);
+  }
+
+  function closeConfirmModal() {
+    confirmModal.classList.remove('open');
+    confirmModal.setAttribute('aria-hidden', 'true');
+    panelBackdrop.classList.remove('active');
+    confirmError.textContent = '';
+    calendarBtn.classList.remove('loading');
+    calendarBtn.disabled = false;
+    setActiveStep(selectedItems.size > 0 ? 1 : 1);
+  }
+
+  confirmClose.addEventListener('click', closeConfirmModal);
+
+  function populateOrderSummary() {
+    orderItemsList.innerHTML = '';
+    const items = Array.from(selectedItems).map(id => GEAR.find(x => x.id === id)).filter(Boolean);
+    items.forEach(g => {
+      const row = document.createElement('div');
+      row.className = 'order-item-row';
+      row.innerHTML = `<span>${g.name}</span><span class="order-item-price">$${g.price}/day</span>`;
+      orderItemsList.appendChild(row);
+    });
+    const days  = getDays();
+    const daily = getDailyTotal();
+    const total = daily * days;
+    const s = formatDate(startDate);
+    const e = formatDate(endDate);
+    orderDates.textContent = `${s} → ${e}`;
+    orderTotal.textContent = total.toLocaleString();
+  }
+
+  function formatDate(d) {
+    if (!d) return '—';
+    const [y, m, day] = d.split('-');
+    return `${day}/${m}/${y}`;
+  }
+
+  /* ─── WEB3FORMS INTEGRATION ─── */
+
+  calendarBtn.addEventListener('click', async () => {
+    clientName  = clientNameIn.value.trim();
+    clientEmail = clientEmailIn.value.trim();
+    confirmError.textContent = '';
+
+    if (!clientName || !clientEmail) {
+      confirmError.textContent = currentLang === 'es'
+        ? 'Por favor completa tu nombre y email.'
+        : 'Please fill in your name and email.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) {
+      confirmError.textContent = currentLang === 'es'
+        ? 'Por favor ingresa un email válido.'
+        : 'Please enter a valid email address.';
+      return;
+    }
+
+    calendarBtn.disabled = true;
+    calendarBtn.classList.add('loading');
+
+    const ok = await sendEmailNotification();
+    if (ok) {
+      showSuccess();
+    } else {
+      calendarBtn.disabled = false;
+      calendarBtn.classList.remove('loading');
+      confirmError.textContent = currentLang === 'es'
+        ? 'Error al enviar. Por favor intenta de nuevo.'
+        : 'Failed to send. Please try again.';
+    }
+  });
+
+  /* ─── WEB3FORMS SUBMISSION ─── */
+  async function sendEmailNotification() {
+    const selectedNames = Array.from(selectedItems).map(id => {
+      const g = GEAR.find(x => x.id === id);
+      return `• ${g.name} — $${g.price}/day`;
+    }).join('\n');
+
+    const days  = getDays();
+    const daily = getDailyTotal();
+    const total = daily * days;
+
+    const payload = {
+      access_key: WEB3FORMS_KEY,
+      from_name:  'DMD Rental System',
+      subject:    `New DMD Rental Request — ${clientName}`,
+      message:
+        `NEW RENTAL REQUEST\n\n` +
+        `Client: ${clientName}\n` +
+        `Email:  ${clientEmail}\n\n` +
+        `Equipment:\n${selectedNames}\n\n` +
+        `Rental Period: ${formatDate(startDate)} → ${formatDate(endDate)} (${days} day${days !== 1 ? 's' : ''})\n` +
+        `Daily Total:   $${daily.toLocaleString()} USD\n` +
+        `Grand Total:   $${total.toLocaleString()} USD`,
+      botcheck: ''
+    };
+
+    try {
+      const res  = await fetch('https://api.web3forms.com/submit', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+      const data = await res.json();
+      return data.success === true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /* ─── SUCCESS SCREEN ─── */
+  function showSuccess() {
+    calendarBtn.disabled = false;
+    calendarBtn.classList.remove('loading');
+    confirmFormView.style.display = 'none';
+    successScreen.classList.add('visible');
+    setActiveStep(3);
+  }
+
+  successBack.addEventListener('click', () => {
+    closeConfirmModal();
+    // Reset all state
+    selectedItems.clear();
+    startDate  = '';
+    endDate    = '';
+    startInput.value = '';
+    endInput.value   = '';
+    clientNameIn.value  = '';
+    clientEmailIn.value = '';
+    renderCards();
+    updateSelectionBar();
+    setActiveStep(1);
+  });
+
+  /* ─── CLEAR SELECTION ─── */
+  selClear.addEventListener('click', () => {
+    selectedItems.clear();
+    gearGrid.querySelectorAll('.gear-card').forEach(card => {
+      card.classList.remove('selected');
+      card.setAttribute('aria-pressed', 'false');
+      const btn = card.querySelector('.gear-select-btn');
+      if (btn) btn.textContent = 'Select';
+    });
+    updateSelectionBar();
+    updatePanelList();
+    updateDateSummary();
+  });
+
+  /* ─── STEP INDICATOR ─── */
+  function setActiveStep(n) {
+    [step1, step2, step3].forEach((s, i) => {
+      s.classList.remove('active', 'completed');
+      if (i + 1 < n)  s.classList.add('completed');
+      if (i + 1 === n) s.classList.add('active');
+    });
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  (function initCursor() {
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+    let mx = -200, my = -200, rx = -200, ry = -200;
+    let ringTimer;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+      document.body.classList.add('cursor-ready');
+    });
+    function animateRing() {
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+    document.addEventListener('mouseenter', () => document.body.classList.add('cursor-ready'));
+    document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-ready'));
+    // Hover expansion (delegated)
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest('a, button, .gear-card')) {
+        ring.style.width  = '50px';
+        ring.style.height = '50px';
+        ring.style.borderColor = 'rgba(234,234,234,0.6)';
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest('a, button, .gear-card')) {
+        ring.style.width  = '32px';
+        ring.style.height = '32px';
+        ring.style.borderColor = 'rgba(234,234,234,0.35)';
+      }
+    });
+  })();
+
+  /* ─── NAV SCROLL ─── */
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ─── REVEAL ON SCROLL ─── */
+  function observeReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.r-reveal:not(.visible)').forEach(el => observer.observe(el));
+  }
+
+  /* ─── LANGUAGE TOGGLE ─── */
+  langToggle.addEventListener('click', () => {
+    currentLang = currentLang === 'en' ? 'es' : 'en';
+    applyLang();
+  });
+
+  function applyLang() {
+    const lang = I18N[currentLang];
+    document.documentElement.lang = currentLang;
+    document.documentElement.dataset.lang = currentLang;
+
+    // Activate classes
+    document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('active', currentLang === 'en'));
+    document.querySelectorAll('.lang-es').forEach(el => el.classList.toggle('active', currentLang === 'es'));
+
+    // Swap text
+    document.body.classList.add('lang-swapping');
+    setTimeout(() => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (lang[key] !== undefined) el.textContent = lang[key];
+      });
+      // Re-render cards to update "Select"/"Seleccionar" labels
+      renderCards();
+      updatePanelList();
+      document.body.classList.remove('lang-swapping');
+    }, 120);
+  }
+
+  /* ─── KEYBOARD TRAP FOR MODALS ─── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (confirmModal.classList.contains('open')) { closeConfirmModal(); return; }
+      if (datePanel.classList.contains('open'))    { closeDatePanel();    return; }
+    }
+  });
+
+  /* ─── INIT ─── */
+  function init() {
+    // Set today as min date
+    const today = new Date().toISOString().split('T')[0];
+    startInput.min = today;
+    endInput.min   = today;
+
+    // Render gear
+    renderCards();
+
+    // Initial bar state
+    updateSelectionBar();
+    updateDateSummary();
+
+    // Initial reveals
+    setTimeout(observeReveal, 100);
+
+    // Set lang UI
+    const stored = localStorage.getItem('dmd-lang') || 'en';
+    if (stored !== currentLang) {
+      currentLang = stored;
+      applyLang();
+    }
+    document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('active', currentLang === 'en'));
+    document.querySelectorAll('.lang-es').forEach(el => el.classList.toggle('active', currentLang === 'es'));
+
+    // Persist lang
+    langToggle.addEventListener('click', () => {
+      localStorage.setItem('dmd-lang', currentLang);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
